@@ -1,6 +1,6 @@
 import React, {useState, useMemo, useCallback, useEffect, FC} from 'react'
 import isHotkey from 'is-hotkey'
-import {Node,createEditor} from 'slate'
+import {Node, createEditor} from 'slate'
 import {
     Slate,
     Editable,
@@ -35,11 +35,11 @@ const EditPost = () => {
         await setMessage(`Edit ${data.title}`);
     }, [id])
 
-    const checkAuth: () => Promise<void> = useCallback(async() => {
+    const checkAuth: () => Promise<void> = useCallback(async () => {
         const response = await fetch('/api/__userinfo__');
         const data = await response.json();
         setAuthed(data.authenticated);
-    },[])
+    }, [])
 
     useEffect(() => {
         checkAuth().then(() => setCheckedAuth(true)).catch(() => {
@@ -58,19 +58,21 @@ const EditPost = () => {
     }, [getPost, checkAuth]);
 
     //the fetching state is defaulted as loading
-    const [fetchState, setFetchState] = useState("loading")
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [tags, setTags] = useState('')
+    const [fetchState, setFetchState] = useState("loading");
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [tags, setTags] = useState('');
     const [lastEditCount, setLastEditCount] = useState(0)
     const [message, setMessage] = useState('');
-    const [failed, setFailed] = useState(false)
-    const [failedMessage, setFailedMessage] = useState(<React.Fragment><strong>Woah there something went wrong!</strong> Are you sure you filled in all the fields?</React.Fragment>)
-    const [, setSubmitted] = useState(false)
+    const [failed, setFailed] = useState(false);
+    const [failedMessage, setFailedMessage] = useState(<React.Fragment><strong>Woah there something went
+        wrong!</strong> Are you sure you filled in all the fields?</React.Fragment>);
+    const [, setSubmitted] = useState(false);
     const [authed, setAuthed] = useState(false);
     const [checkedAuth, setCheckedAuth] = useState(false);
-    const [madeChanges, setMadeChanges] = useState(false)
-    const [success, setSuccess] = useState(false)
+    const [madeChanges, setMadeChanges] = useState(false);
+    const [signOff, setSignOff] = useState(false);
+    const [success, setSuccess] = useState(false);
     //Slate.js editor states
     const [value, setValue] = useState<Node[]>(initialValue)
     const renderElement = useCallback(props => <Element {...props} />, [])
@@ -81,14 +83,13 @@ const EditPost = () => {
     )
 
 
-
     if (checkedAuth && !authed) {
         return <NotAuthenticated/>
     }
 
     const submitPost = (event) => {
         event.preventDefault();
-        
+
         //There must be a change to something to submit an edit
         if ((title === "" || description === "" || tags === "" || window.localStorage.getItem('content') === undefined)) {
             setFailed(true)
@@ -125,7 +126,9 @@ const EditPost = () => {
                     setSuccess(true)
                 } else if (r === 'OUTDATED') {
                     setFailed(true);
-                    setFailedMessage(<React.Fragment><strong>This page has been edited by someone else while you were editing it.</strong> Please salvage your work, cancel the edit, re-edit the page and copy your work back in.</React.Fragment>)
+                    setFailedMessage(<React.Fragment><strong>This page has been edited by someone else while you were
+                        editing it.</strong> Please salvage your work, cancel the edit, re-edit the page and copy your
+                        work back in.</React.Fragment>)
                 } else {
                     setFailed(true);
                 }
@@ -139,18 +142,18 @@ const EditPost = () => {
         if (failed) {
             return (<div className="alert alert-danger show" role="alert">
                 {failedMessage}
-            </div>)
+            </div>);
         } else {
             return null;
         }
     }
-    const SubmitButton:  FC = () => {
-        if (madeChanges) {
+    const SubmitButton: FC = () => {
+        if (madeChanges && signOff) {
             return (
-                <button className={"btn btn-primary btn-lg"}
+                <button className={"btn btn-primary btn-lg submit-form-button"}
                         onClick={submitPost}>Submit Edits
                 </button>
-            )
+            );
         } else {
             return null;
         }
@@ -186,6 +189,57 @@ const EditPost = () => {
             >
                 <form className={"submit-post"}>
                     <FailedPost/>
+                    <label className={"form-input"}>
+                        <input
+                            type={"text"}
+                            className={"form-input"}
+                            onChange={event => {
+                                setTitle(event.target.value)
+                                setMadeChanges(true)
+                            }}
+                            name={"title"}
+                            placeholder="&nbsp;"
+                            defaultValue={title}
+                            required/>
+                        <span className="label">Title</span>
+                        <span className="focus-bg"/>
+                    </label>
+                    <label className={"form-input"}>
+                        <input type={"text"}
+                               className={"form-input"}
+                               onChange={event => {
+                                   setDescription(event.target.value)
+                                   setMadeChanges(true)
+                               }}
+                               placeholder="&nbsp;"
+                               name={"description"}
+                               defaultValue={description}
+                               required/>
+                        <span className="label">Description</span>
+                        <span className="focus-bg"/>
+                    </label>
+                    <select className={"custom-select"}
+                            onChange={event => {
+                                setTags(event.target.value)
+                                setMadeChanges(true)
+                            }}
+                            required>
+                        <option value="" selected disabled>Select a Category</option>
+                        <option value="" disabled>Note: these categories are based off Fallen_Breaths Minecraft Tech Tree v1.3</option>
+                        <option value="Block Resource">Block Resource</option>
+                        <option value="Block Farming">Block Farming</option>
+                        <option value="Mob Resource">Mob Resource</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Animal Husbandry">Animal Husbandry</option>
+                        <option value="World Manipulation">World Manipulation</option>
+                        <option value="World Transportation">World Transportation</option>
+                        <option value="Traffic">Traffic</option>
+                        <option value="Resource Management and Processing">Resource Management and Processing
+                        </option>
+                        <option value="Duplicate">Duplicate</option>
+                        <option value="Community">Community</option>
+
+                    </select>
                     <Toolbar>
                         <MarkButton format="bold" icon="format_bold"/>
                         <MarkButton format="italic" icon="format_italic"/>
@@ -199,48 +253,8 @@ const EditPost = () => {
                         <InsertImageButton/>
                         <LinkButton/>
                     </Toolbar>
-                    <input
-                        type={"text"}
-                        id={"title"}
-                        onChange={event => {
-                            setTitle(event.target.value)
-                            setMadeChanges(true)
-                        }}
-                        placeholder={"Title"}
-                        name={"title"}
-                        defaultValue={title}
-                        required/>
-                    <br/>
-                    <input type={"text"}
-                           onChange={event => {
-                               setDescription(event.target.value)
-                               setMadeChanges(true)
-                           }}
-                           placeholder={"Description"}
-                           name={"description"}
-                           defaultValue={description}
-                           required/>
-                    <br/>
-                    <select className={"custom-select"}
-                            onChange={event => {
-                                setTags(event.target.value)
-                                setMadeChanges(true)
-                            }}
-                            required>
-                        <option value="Components">Components</option>
-                        <option value="Mob Farming">Mob Farming</option>
-                        <option value="General Farming">General Farming</option>
-                        <option value="Transportation">Transportation</option>
-                        <option value="Storage Tech">Storage Tech</option>
-                        <option value="Redstone">Redstone</option>
-                        <option value="TNT">TNT</option>
-                        <option value="Flying Machines">Flying Machines</option>
-                        <option value="Exploits">Exploits</option>
-                        <option value="Guides">Guides</option>
-                        <option value="Community">Community</option>
-                        <option value="Getting Started">Getting Started</option>
-                    </select>
                     <Editable
+                        className={"editor"}
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}
                         placeholder="Enter some rich text…"
@@ -256,22 +270,32 @@ const EditPost = () => {
                             }
                         }}
                     />
-                    <input type={"text"}
-                           onChange={event => {
-                               setMessage(event.target.value);
-                               setMadeChanges(true);
-                           }}
-                           placeholder={"Message"}
-                           name={"message"}
-                           defaultValue={message}
-                           required/>
+                    <label className={"form-input"}>
+                        <input type={"text"}
+                               onChange={event => {
+                                   setMessage(event.target.value);
+                                   setSignOff(true);
+                               }}
+                               id={"form-input"}
+                               placeholder="&nbsp;"
+                               name={"message"}
+                               required/>
+                        <span className="label">Describe what you changed</span>
+                        <span className="focus-bg"/>
+                    </label>
+                    {signOff
+                        ? <div/>
+                        : <div className="alert alert-warning" role="alert">Please provide an edit message of what you changed before submitting.</div>
+                    }
                     <div className={"spacing-block"}/>
                     <SubmitButton/>
 
                 </form>
             </Slate>
         )
-    } else {
+    }
+else
+    {
         return (
             <div className="alert alert-success" role="alert">
                 <h4 className="alert-heading">Success!</h4>
@@ -280,6 +304,7 @@ const EditPost = () => {
                     whole. People like you
                     make this community fun and expanding. Keep up the great work, and we hope to see you again!
                 </p>
+                <a href={"/render-post/" + id}>Check out your changes to post number {id}!</a>
             </div>
         )
     }
@@ -289,9 +314,10 @@ const EditPost = () => {
 const initialValue = [
     {
         children: [
-            { text: '' },
+            {text: ''},
         ],
-    },
+    }
+,
 ]
 
 export default EditPost

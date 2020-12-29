@@ -1,75 +1,75 @@
 import React from "react"
 
-const Directory = () => {
+const Categories = () => {
     return (
         <div className="jumbotron">
+
             <div className="container">
                 <div className="div content">
                     <div className="categories">
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                Getting Started
+                                Block Resource
                             </a>
                         </div>
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                Mob Farms
+                                Block Harvest
                             </a>
                         </div>
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                General Farming
+                                Mob Resource
                             </a>
                         </div>
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                Transportation
-                            </a>
-                        </div>
-                        <div className="categories_item">
-                            <a href="" className="">
-                                Storage Tech
+                                Agriculture
                             </a>
                         </div>
 
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                Redstone
+                                Animal Husbandry
                             </a>
                         </div>
 
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                TNT
+                                World Manipulation
                             </a>
                         </div>
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                Flying Machines
-                            </a>
-                        </div>
-
-                        <div className="categories_item">
-                            <a href="" className="">
-                                Components
+                                World Transformation
                             </a>
                         </div>
 
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                Exploits
+                                Traffic
                             </a>
                         </div>
 
-                        <div className="categories_item">
+                        <div className="categories-item">
                             <a href="" className="">
-                                Guides
+                                Resource Management and Processing
                             </a>
                         </div>
 
-                        <div className="categories_item">
+                        <div className="categories-item">
+                            <a href="" className="">
+                                Duplicate
+                            </a>
+                        </div>
+
+                        <div className="categories-item">
                             <a href="" className="">
                                 Community
+                            </a>
+                        </div>
+                        <div className="categories-item">
+                            <a href="" className="">
                             </a>
                         </div>
 
@@ -81,4 +81,4 @@ const Directory = () => {
     );
 }
 
-export default Directory
+export default Categories

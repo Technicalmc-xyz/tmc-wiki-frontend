@@ -8,16 +8,16 @@ const Footer = () => (
         <footer className="page-footer font-small special-color-dark pt-4">
             <div className="container">
                 <nav className="list-unstyled list-inline text-center">
-                    <a className="footer-icon" href="https://github.com/Jackbaude/tmc-wiki" target="_blank"
+                    <a className={"footer-icon"} href="https://github.com/Technicalmc-xyz" target="_blank"
                        rel="noreferrer noopener">
                         <FontAwesomeIcon icon={faGithub} size="2x"/>
                     </a>
-                    <a className={"footer-icon"} href={"https://discord.gg/FcTFg2E"} target={"_blank"}
+                    <a className={"footer-icon"} href="https://discord.gg/FcTFg2E" target={"_blank"}
                        rel={"noreferrer noopener"}>
                         <FontAwesomeIcon icon={faDiscord} size="2x"/>
                     </a>
                     <a className="footer-icon"
-                       href={"https://www.reddit.com/r/technicalminecraft/"} target={"_blank"}
+                       href="https://www.reddit.com/r/technicalminecraft/" target={"_blank"}
                        rel="noreferrer noopener">
                         <FontAwesomeIcon icon={faReddit} size="2x" color={""}/>
                     </a>

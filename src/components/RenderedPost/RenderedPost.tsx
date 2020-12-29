@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback, useEffect} from 'react'
+import React, {useState, useMemo, useCallback, useEffect, FC} from 'react'
 import {Node, createEditor} from 'slate'
 import {
     Slate,
@@ -9,7 +9,8 @@ import {
 import {withHistory} from 'slate-history'
 import {useParams} from "react-router";
 import {Element, Leaf, withLinks, withImages} from "../Elements";
-
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSignOutAlt, faTrash, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 const RenderedPost = () => {
     const {id} = useParams();
     const getPost: () => Promise<void> = useCallback(async () => {
@@ -49,7 +50,6 @@ const RenderedPost = () => {
         () => withImages(withLinks(withHistory(withReact(createEditor())))),
         []
     )
-
     // if the post is still loading just render a loading bar
     if (fetchState === "loading") {
         return (
@@ -68,8 +68,8 @@ const RenderedPost = () => {
         )
     }
     const editLink = authenticated
-        ? <a className={"btn btn-lg"} href={"/edit-post/" + id}>Edit Post</a>
-        : <a className={"btn btn-lg"} href={"/api/auth?redirect=" + encodeURIComponent('/edit-post/' + id)}>Login to Edit Post</a>
+        ? <a className={"btn btn-lg submit-form-button"} href={"/edit-post/" + id}>Edit Post</a>
+        : <a className={"btn btn-lg submit-form-button"} href={"/api/auth?redirect=" + encodeURIComponent('/edit-post/' + id)}>Login to Edit Post</a>
     return (
         <div>
             <h1>{title}</h1>

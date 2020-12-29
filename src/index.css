@@ -34,9 +34,9 @@ html {
     --global-color-tertiary: #187EF7;
     /*Jumbotron background*/
     --global-jumbo-bg-color: rgba(52, 73, 94, 0.1);
-    /*Login and signup padding*/
-    --input-padding-x: .75rem;
-    --input-padding-y: .75rem;
+    /*Input form boxes*/
+    --global-input-placeholder: silver;
+    --global-input-hover-background: rgba(0,0,0,0.03);
 }
 
 html[data-theme='dark'] {
@@ -57,6 +57,9 @@ html[data-theme='dark'] {
     --global-color-tertiary: #187EF7;
     /*Jumbotron background*/
     --global-jumbo-bg-color: #263859;
+    /*Input form boxes*/
+    --global-input-placeholder: white;
+    --global-input-hover-background: rgba(38, 56, 89,0.2);
 
 
 }
@@ -183,41 +186,25 @@ a.nav-link {
     text-decoration: none;
     /*margin-left: 1vw;*/
 }
+/*Home page categoies box*/
 .categories {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
 }
-.categories_item {
+.categories-item {
     flex: 1 0 20%;
     margin: 5px;
 }
-.categories_item a{
+.categories-item a{
     color: var(--global-text-color-primary)!important;
     font-size: larger;
 }
-.git-commits svg {
-    color: var(--global-text-color-primary);
-}
-.landing-title::after {
-    content: "Now with Night Mode!";
-    position: absolute;
-    font-size: 1rem;
-    transform: rotate(30deg) translateX(-50%) translateY(2rem);
-    color: yellow;
-    animation-name: minecraft-text;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
 
-}
 .post-link-jumbo a:hover {
     text-decoration: none;
 }
-.custom-select{
-    background: var(--global-bg-color-primary)!important;
-    color: var(--global-text-color-primary)!important;
-    margin-bottom: 1vh;
-}
+
 .file-input{
     display: none;
 }
@@ -253,35 +240,102 @@ a.nav-link {
     background: var(--global-bg-color-primary);
     padding-bottom: 5px;
     padding-top: 25px;
-    border-bottom: currentColor 2px solid;
+    border-bottom: #cccccc 2px solid;
 
 }
+
 .spacing-block {
     height: 4vw;
     width: 100%;
 }
+.form-input {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.form-input .label {
+    position: absolute;
+    top: 20px;
+    left: 12px;
+    font-size: 16px;
+    color: var(--global-text-color-primary);
+    font-weight: 500;
+    transform-origin: 0 0;
+    transform: translate3d(0, 0, 0);
+    transition: all 0.2s ease;
+    pointer-events: none;
+    width: 100%;
+}
+.form-input .focus-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left;
+}
 
-.submit-post input {
+.form-input input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /*appearance: none;*/
+    width: 100%;
+    border: 0;
+    padding: 16px 12px 0 12px;
+    height: 56px;
+    font-size: 16px;
+    font-weight: 400;
     background: var(--global-bg-color-primary);
-    color: currentColor;
+    box-shadow: inset 0 -1px 0 var(--global-input-placeholder);
+    color: var(--global-text-color-primary);
+    transition: all 0.15s ease;
+}
+.form-input input:hover {
+    background: var(--global-input-hover-background);
+    box-shadow: inset 0 -1px 0 var(--global-color-primary);;
+}
+
+.form-input input:not(:-moz-placeholder-shown) + .label {
+    color: var(--global-input-placeholder);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+.form-input input:not(:-ms-input-placeholder) + .label {
+    color: var(--global-input-placeholder);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+.form-input input:not(:placeholder-shown) + .label {
+    color: var(--global-input-placeholder);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+.form-input input:focus {
+    background: rgba(0, 0, 0, 0.05);
+    outline: none;
+    box-shadow: inset 0 -2px 0 var(--global-color-primary);
+}
+.form-input input:focus + .label {
+    color: var(--global-color-primary);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+}
+.form-input input:focus + .label + .focus-bg {
+    transform: scaleX(1);
+    transition: all 0.1s ease;
+}
+.custom-select{
+    background: var(--global-bg-color-primary)!important;
+    color: var(--global-text-color-primary)!important;
     margin-bottom: 1vh;
-    padding: 1px;
-    border: none;
-}
-
-#title-input {
-    font-size: 3rem;
-    width: 100%;
-    overflow-wrap: break-word;
-    white-space: initial;
-}
-
-#description-input {
     width: 100%;
 }
-
 .submit-post input::placeholder {
     color: silver;
+}
+.submit-form-button {
+    margin-bottom: 10%;
 }
 
 .post-link {
@@ -329,69 +383,6 @@ a.nav-link {
     background: white;
 }
 
-/*Login and signup form*/
-.form-signin {
-    width: 100%;
-    max-width: 420px;
-    padding: 15px;
-    margin: 0 auto;
-}
-
-.form-label-group {
-    position: relative;
-    margin-bottom: 1rem;
-}
-
-.form-label-group > input,
-.form-label-group > label {
-    padding: var(--input-padding-y) var(--input-padding-x);
-}
-
-.form-label-group > label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    width: 100%;
-    margin-bottom: 0; /* Override default `<label>` margin */
-    line-height: 1.5;
-    color: #495057;
-    border: 1px solid transparent;
-    border-radius: .25rem;
-    transition: all .1s ease-in-out;
-}
-
-.form-label-group input::-webkit-input-placeholder {
-    color: transparent;
-}
-
-.form-label-group input:-ms-input-placeholder {
-    color: transparent;
-}
-
-.form-label-group input::-ms-input-placeholder {
-    color: transparent;
-}
-
-.form-label-group input::-moz-placeholder {
-    color: transparent;
-}
-
-.form-label-group input::placeholder {
-    color: transparent;
-}
-
-.form-label-group input:not(:placeholder-shown) {
-    padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
-    padding-bottom: calc(var(--input-padding-y) / 3);
-}
-
-.form-label-group input:not(:placeholder-shown) ~ label {
-    padding-top: calc(var(--input-padding-y) / 3);
-    padding-bottom: calc(var(--input-padding-y) / 3);
-    font-size: 12px;
-    color: #777;
-}
 /*Animation Classes*/
 .slide {
     animation-name: slide-in;

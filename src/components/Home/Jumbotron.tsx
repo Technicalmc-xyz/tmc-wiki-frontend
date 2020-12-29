@@ -11,14 +11,11 @@ const Jumbotron = () => {
             <h1 className="display-3">Technical Minecraft Wiki <img src={book} alt={"book:("} id={"book-image"}/></h1>
             <p className="lead">Welcome to the Technical Minecraft Wiki.</p>
             <hr className="my-4"/>
-            {/*<div className={"jumbo-content"}>*/}
-            {/*    <LatestPosts/>*/}
-            {/*</div>*/}
-
+            <LatestPosts/>
             <p className="lead">
-                <a className="btn btn-lg jumbo-link" href="https://github.com/Jackbaude/tmc-wiki" target="_blank"
+                <a className="btn btn-lg jumbo-link" href="https://github.com/Technicalmc-xyz" target="_blank"
                    rel="noreferrer noopener" role="button">Contribute <FontAwesomeIcon icon={faGithub} size={"lg"}/></a>
-                <a className="btn btn-lg jumbo-link" href="https://github.com/Jackbaude/tmc-frontend/issues/new"
+                <a className="btn btn-lg jumbo-link" href="https://github.com/Technicalmc-xyz"
                    target="_blank"
                    rel="noreferrer noopener" role="button">Issues <FontAwesomeIcon icon={faExclamationCircle}
                                                                                    size={"lg"}/></a>

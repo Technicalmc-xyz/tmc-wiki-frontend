@@ -102,7 +102,7 @@ const NewPost = () => {
     const SubmitButton = () => {
         if (madeChanges) {
             return (
-                <button className={"btn btn-primary btn-lg"}
+                <button className={"btn btn-primary btn-lg submit-form-button"}
                         onClick={submitPost}>Create Post
                 </button>
             );
@@ -124,6 +124,56 @@ const NewPost = () => {
             >
                 <form className={"submit-post"}>
                     <FailedPost/>
+                    <label className={"form-input"}>
+                        <input
+                            type={"text"}
+                            className={"form-input"}
+                            onChange={event => {
+                                setTitle(event.target.value)
+                                setMadeChanges(true)
+                            }}
+                            name={"title"}
+                            placeholder="&nbsp;"
+                            defaultValue={title}
+                            required/>
+                        <span className="label">Title</span>
+                        <span className="focus-bg"/>
+                    </label>
+                    <label className={"form-input"}>
+                        <input type={"text"}
+                               className={"form-input"}
+                               onChange={event => {
+                                   setDescription(event.target.value)
+                                   setMadeChanges(true)
+                               }}
+                               placeholder="&nbsp;"
+                               name={"description"}
+                               defaultValue={description}
+                               required/>
+                        <span className="label">Description</span>
+                        <span className="focus-bg"/>
+                    </label>
+                    <select className={"custom-select"}
+                            onChange={event => {
+                                setTags(event.target.value)
+                                setMadeChanges(true)
+                            }}
+                            required>
+                        <option value="" selected disabled>Select a Category</option>
+                        <option value="Block Resource">Block Resource</option>
+                        <option value="Block Farming">Block Farming</option>
+                        <option value="Mob Resource">Mob Resource</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Animal Husbandry">Animal Husbandry</option>
+                        <option value="World Manipulation">World Manipulation</option>
+                        <option value="World Transportation">World Transportation</option>
+                        <option value="Traffic">Traffic</option>
+                        <option value="Resource Management and Processing">Resource Management and Processing
+                        </option>
+                        <option value="Duplicate">Duplicate</option>
+                        <option value="Community">Community</option>
+
+                    </select>
                     <Toolbar>
                         <MarkButton format="bold" icon="format_bold"/>
                         <MarkButton format="italic" icon="format_italic"/>
@@ -137,46 +187,8 @@ const NewPost = () => {
                         <InsertImageButton/>
                         <LinkButton/>
                     </Toolbar>
-                    <input
-                        type={"text"}
-                        id={"title"}
-                        onChange={event => {
-                            setTitle(event.target.value)
-                            setMadeChanges(true)
-                        }}
-                        placeholder={"Title"}
-                        name={"title"}
-                        required/>
-                    <br/>
-                    <input type={"text"}
-                           onChange={event => {
-                               setDescription(event.target.value)
-                               setMadeChanges(true)
-                           }}
-                           placeholder={"Description"}
-                           name={"description"}
-                           required/>
-                    <br/>
-                    <select className={"custom-select"}
-                            onChange={event => {
-                                setTags(event.target.value)
-                                setMadeChanges(true)
-                            }}
-                            required>
-                        <option value="Components">Components</option>
-                        <option value="Mob Farming">Mob Farming</option>
-                        <option value="General Farming">General Farming</option>
-                        <option value="Transportation">Transportation</option>
-                        <option value="Storage Tech">Storage Tech</option>
-                        <option value="Redstone">Redstone</option>
-                        <option value="TNT">TNT</option>
-                        <option value="Flying Machines">Flying Machines</option>
-                        <option value="Exploits">Exploits</option>
-                        <option value="Guides">Guides</option>
-                        <option value="Community">Community</option>
-                        <option value="Getting Started">Getting Started</option>
-                    </select>
                     <Editable
+                        className={"editor"}
                         renderElement={renderElement}
                         renderLeaf={renderLeaf}
                         placeholder="Enter some rich text…"
