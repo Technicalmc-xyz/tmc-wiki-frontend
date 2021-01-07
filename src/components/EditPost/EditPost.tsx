@@ -238,7 +238,6 @@ const EditPost = () => {
                         </option>
                         <option value="Duplicate">Duplicate</option>
                         <option value="Community">Community</option>
-
                     </select>
                     <Toolbar>
                         <MarkButton format="bold" icon="format_bold"/>
