@@ -4,13 +4,10 @@ import {
     Slate,
     Editable,
     withReact,
-
 } from 'slate-react'
 import {withHistory} from 'slate-history'
 import {useParams} from "react-router";
 import {Element, Leaf, withLinks, withImages} from "../Elements";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSignOutAlt, faTrash, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 const RenderedPost = () => {
     const {id} = useParams();
     const getPost: () => Promise<void> = useCallback(async () => {
