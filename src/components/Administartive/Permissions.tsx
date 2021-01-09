@@ -1,6 +1,5 @@
 //TODO add pagnation
 import React, {memo, useEffect, useMemo, useState} from "react"
-import {text} from "@fortawesome/fontawesome-svg-core";
 
 const Permissions = () => {
 
@@ -59,7 +58,7 @@ const Permissions = () => {
 
     };
     const userTable = useMemo(() => userData
-            .filter(user => user.Rank == filterRank || filterRank == 'all')
+            .filter(user => user.Rank === filterRank || filterRank === 'all')
             .map(({Username, DiscordId, Rank}: User) => (
                     <tr>
                         <td>{Username}</td>
@@ -76,9 +75,6 @@ const Permissions = () => {
                                 <option value="dev">Dev</option>
                                 <option value="mod">Mod</option>
                             </select>
-                        </td>
-                        <td>
-
                         </td>
                     </tr>
                 )
@@ -135,7 +131,7 @@ const Permissions = () => {
         <div>
             {alerts}
             {filterRole()}
-            <table className="table">
+            <table className="table table-responsive-md">
                 <thead>
                 <tr>
                     <th scope="col">Username</th>
