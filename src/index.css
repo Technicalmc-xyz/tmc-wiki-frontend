@@ -186,6 +186,10 @@ a.nav-link {
     text-decoration: none;
     /*margin-left: 1vw;*/
 }
+.post-sort-filter {
+    width: 10vw !important;
+    margin-right: 1vw;
+}
 /*Home page categoies box*/
 .categories {
     display: flex;
@@ -329,7 +333,6 @@ a.nav-link {
     background: var(--global-bg-color-primary)!important;
     color: var(--global-text-color-primary)!important;
     margin-bottom: 1vh;
-    width: 100%;
 }
 .submit-post input::placeholder {
     color: silver;
