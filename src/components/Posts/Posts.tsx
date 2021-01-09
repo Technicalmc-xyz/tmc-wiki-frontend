@@ -69,7 +69,7 @@ const Posts = () => {
     const sortAndFilter = () => {
         return (
             <div>
-                <select className={"custom-select post-sort-filter"}
+                <select className={"custom-select sort-filter-select"}
                         onChange={event => {
                             setTagFilter(event.target.value)
                         }}>
@@ -90,7 +90,7 @@ const Posts = () => {
                         v1.3
                     </option>
                 </select>
-                <select className={"custom-select post-sort-filter"}
+                <select className={"custom-select sort-filter-select"}
                         onChange={event => {
                             setSortType(event.target.value)
                         }}>

@@ -9,7 +9,7 @@ import NewPost from "./components/NewPost/NewPost";
 import Archive from "./components/Archive/Archive";
 import About from "./components/About/About";
 import License from './components/License/License';
-import Permissions from "./components/Administartive/Permissions";
+import Permissions from "./components/Administrative/Permissions";
 const App = () => {
     return (
         <Router>

@@ -186,7 +186,7 @@ a.nav-link {
     text-decoration: none;
     /*margin-left: 1vw;*/
 }
-.post-sort-filter {
+.sort-filter-select {
     width: 10vw !important;
     margin-right: 1vw;
 }
