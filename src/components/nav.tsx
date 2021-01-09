@@ -30,7 +30,7 @@ const Nav = () => {
             return (
                 <React.Fragment>
                     <li className="nav-item discord-data">
-                        <img src={avatarUrl} alt={"Discord Avatar"} width={"32"} height={"32"} className={"discord-avatar"}/>
+                        <img src={avatarUrl} alt={"Discord Avatar Not Found"} width={"32"} height={"32"} className={"discord-avatar"}/>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href={"/api/auth/logout"}><FontAwesomeIcon icon={faSignOutAlt} size={"2x"}/></a>

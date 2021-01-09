@@ -12,6 +12,7 @@ const Permissions = () => {
     //default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
     const [filterRank, setFilterRank] = useState('all')
+    const [sortType, setSortType] = useState('')
     const [alertMessages, setAlertMessages] = useState([]);
     useEffect(() => {
         getUsers()
@@ -32,7 +33,14 @@ const Permissions = () => {
         console.log(data)
         await setMetadata(data);
     };
-
+    const sort = (a, b): number => {
+        if (sortType === 'username') {
+            return a.Username.localeCompare(b.Username)
+        }
+        else if (sortType === 'username-reverse') {
+            return b.Username.localeCompare(a.Username)
+        }
+    }
     const handleModify = async (DiscordID, Rank) => {
         fetch("/api/__modifyuserperms__", {
             // Adding method type
@@ -58,6 +66,7 @@ const Permissions = () => {
 
     };
     const userTable = useMemo(() => userData
+            .sort((a,b) => sort(a,b))
             .filter(user => user.Rank === filterRank || filterRank === 'all')
             .map(({Username, DiscordId, Rank}: User) => (
                     <tr>
@@ -79,7 +88,8 @@ const Permissions = () => {
                     </tr>
                 )
             ),
-        [userData, filterRank]);
+        [userData, filterRank, sortType]);
+
     const handleCloseAlert = removeMessage => {
         setAlertMessages(alertMessages.filter(alert => alert.message !== removeMessage))
 
@@ -99,16 +109,27 @@ const Permissions = () => {
 
     const filterRole = () => {
         return (
-            <select className="custom-select" defaultValue={"all"}
-                    onChange={event => setFilterRank(event.target.value)}>
-                <option value="all">All</option>
-                <option value="banned">Banned</option>
-                <option value="guest">Guest</option>
-                <option value="trusted">Trusted</option>
-                <option value="editor">Editor</option>
-                <option value="dev">Dev</option>
-                <option value="mod">Mod</option>
-            </select>
+            <div>
+                <select className="custom-select sort-filter-select" defaultValue={"all"}
+                        onChange={event => setFilterRank(event.target.value)}>
+                    <option value="all">All</option>
+                    <option value="banned">Banned</option>
+                    <option value="guest">Guest</option>
+                    <option value="trusted">Trusted</option>
+                    <option value="editor">Editor</option>
+                    <option value="dev">Dev</option>
+                    <option value="mod">Mod</option>
+                </select>
+                <select className={"custom-select sort-filter-select"}
+                        onChange={event => {
+                            setSortType(event.target.value)
+                        }}>
+                    <option value="username" selected>Username A-Z</option>
+                    <option value="username-reverse">Username Z-A</option>
+                </select>
+            </div>
+
+
         )
     }
     // if the post is still loading just render a loading bar
