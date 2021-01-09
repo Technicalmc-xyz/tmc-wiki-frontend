@@ -14,6 +14,7 @@ const Posts = () => {
     //default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
     const [tagFilter, setTagFilter] = useState('all')
+    const [sortType, setSortType] = useState('newest')
     useEffect(() => {
         getPostMetaData()
             //If the fetch got the data make the state a success
@@ -32,25 +33,43 @@ const Posts = () => {
         await setMetadata(data);
     };
 
-    const post = useMemo(() => metadata
-            .filter(filter => filter.tags === tagFilter || tagFilter === 'all')
-            .map(({title, id, tags, last_edited, description}: Post) => (
-                    <div className={"post-link slide"}>
-                        <div className={"post-link-title"}><a href={"/render-post/" + id}><h1 className={"link"}>{title}</h1>
-                        </a></div>
-                        <div>About: {description}</div>
-                        <div>Tags: {tags}</div>
-                        <div>Last updated: {new Date(last_edited).toLocaleString()}</div>
-                    </div>
-                )
-            ),
-        [metadata, tagFilter]);
+    const sort = (a, b): number => {
+        if (sortType === 'newest') {
+            return b.last_edited - a.last_edited;
+        }
+        else if (sortType === 'oldest') {
+            return a.last_edited - b.last_edited;
+        }
+        else if (sortType === 'alphabetic') {
+            return a.title.localeCompare(b.title)
+        }
+        else if (sortType === 'alphabetic-reverse') {
+            return b.title.localeCompare(a.title)
+        }
+    }
+    const post = useMemo(() => {
+            return metadata
+                .sort((a,b) => sort(a,b))
+                .filter(filter => filter.tags === tagFilter || tagFilter === 'all')
+                .map(({title, id, tags, last_edited, description}: Post) => (
+                        <div className={"post-link slide"}>
+                            <div className={"post-link-title"}><a href={"/render-post/" + id}><h1
+                                className={"link"}>{title}</h1>
+                            </a></div>
+                            <div>About: {description}</div>
+                            <div>Tags: {tags}</div>
+                            <div>Last updated: {new Date(last_edited).toLocaleString()}</div>
+                        </div>
+                    )
+                );
 
-    const selectFilter = () => {
+        },
+        [metadata, tagFilter, sortType]);
+
+    const sortAndFilter = () => {
         return (
             <div>
-                <label>Filter by tag</label>
-                <select className={"custom-select"}
+                <select className={"custom-select post-sort-filter"}
                         onChange={event => {
                             setTagFilter(event.target.value)
                         }}>
@@ -71,9 +90,19 @@ const Posts = () => {
                         v1.3
                     </option>
                 </select>
+                <select className={"custom-select post-sort-filter"}
+                        onChange={event => {
+                            setSortType(event.target.value)
+                        }}>
+                    <option value="newest" selected>Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="alphabetic">A-Z</option>
+                    <option value="alphabetic-reverse">Z-A</option>
+                </select>
             </div>
         );
     }
+
     // if the post is still loading just render a loading circle
     if (fetchState === "loading") {
         return (
@@ -92,7 +121,7 @@ const Posts = () => {
         )
     } else return (
         <div>
-            {selectFilter()}
+            {sortAndFilter()}
             {post}
         </div>
     );
