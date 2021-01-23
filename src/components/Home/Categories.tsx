@@ -1,81 +1,50 @@
 import React from "react"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faDiscord} from "@fortawesome/free-brands-svg-icons";
 
 const Categories = () => {
     return (
-        <div className="jumbotron">
-
-            <div className="container">
-                <div className="div content">
-                    <div className="categories">
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Block Resource
-                            </a>
-                        </div>
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Block Harvest
-                            </a>
-                        </div>
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Mob Resource
-                            </a>
-                        </div>
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Agriculture
-                            </a>
-                        </div>
-
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Animal Husbandry
-                            </a>
-                        </div>
-
-                        <div className="categories-item">
-                            <a href="" className="">
-                                World Manipulation
-                            </a>
-                        </div>
-                        <div className="categories-item">
-                            <a href="" className="">
-                                World Transformation
-                            </a>
-                        </div>
-
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Traffic
-                            </a>
-                        </div>
-
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Resource Management and Processing
-                            </a>
-                        </div>
-
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Duplicate
-                            </a>
-                        </div>
-
-                        <div className="categories-item">
-                            <a href="" className="">
-                                Community
-                            </a>
-                        </div>
-                        <div className="categories-item">
-                            <a href="" className="">
-                            </a>
-                        </div>
-
-                    </div>
+        <div>
+            <div className="row">
+                <div className="col-md-3">
+                    <h2>Discord</h2>
                 </div>
+                <div className="col-md-3">
+                    <h2>Github</h2>
+                </div>
+                <div className="col-md-3">
+                    <h2>Community</h2>
+                </div>
+                <div className="col-md-3">
+                    <h2>Community</h2>
+                </div>
+            </div>            <div className="row">
+            <div className="col-md-3">
+                <h2>Discord</h2>
             </div>
+            <div className="col-md-3">
+                <h2>Github</h2>
+            </div>
+            <div className="col-md-3">
+                <h2>Community</h2>
+            </div>
+            <div className="col-md-3">
+                <h2>Community</h2>
+            </div>
+        </div>            <div className="row">
+            <div className="col-md-3">
+                <h2>Discord</h2>
+            </div>
+            <div className="col-md-3">
+                <h2>Github</h2>
+            </div>
+            <div className="col-md-3">
+                <h2>Community</h2>
+            </div>
+            <div className="col-md-3">
+                <h2>Community</h2>
+            </div>
+        </div>
 
         </div>
     );

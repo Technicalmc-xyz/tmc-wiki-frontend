@@ -7,9 +7,9 @@ import {
     withReact,
 } from 'slate-react'
 import {withHistory} from 'slate-history'
-import {Toolbar, MarkButton, BlockButton, InsertImageButton, LinkButton, toggleMark} from '../RichUtils'
+import {Toolbar, MarkButton, BlockButton, InsertImageButton, LinkButton, toggleMark, CopyLinkButton} from '../RichUtils'
 import {Element, Leaf, withLinks, withImages} from "../Elements";
-import NotAuthenticated from "../NotAuthenticated/NotAuthenticated";
+import NotAuthenticated from "../ErrorPages/NotAuthenticated";
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -41,6 +41,7 @@ const NewPost = () => {
         () => withImages(withLinks(withHistory(withReact(createEditor())))),
         []
     )
+
     const checkAuth = async () => {
         const response = await fetch('/api/__userinfo__');
         const data = await response.json();
@@ -65,6 +66,7 @@ const NewPost = () => {
             tags: tags,
             body: window.localStorage.getItem('content')
         })
+
         fetch("/api/__newpost__", {
             // Adding method type
             method: "POST",
@@ -90,6 +92,7 @@ const NewPost = () => {
             })
 
     }
+
     const FailedPost = () => {
         if (failed) {
             return (<div className="alert alert-danger show" role="alert">
@@ -99,6 +102,7 @@ const NewPost = () => {
             return null;
         }
     }
+
     const SubmitButton = () => {
         if (madeChanges) {
             return (
@@ -110,6 +114,7 @@ const NewPost = () => {
             return null;
         }
     }
+
     if (!success) {
         return (
             <Slate
@@ -209,7 +214,8 @@ const NewPost = () => {
                 </form>
             </Slate>
         )
-    } else {
+    }
+    else {
         return (
             <div className="alert alert-success" role="alert">
                 <h4 className="alert-heading">Success!</h4>

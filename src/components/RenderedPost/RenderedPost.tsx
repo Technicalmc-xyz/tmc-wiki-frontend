@@ -38,6 +38,7 @@ const RenderedPost = () => {
             })
     }, [getPost]);
 
+
     const [title, setTitle] = useState('')
     const [lastEdited, setLastEdited] = useState(0)
     const [value, setValue] = useState<Node[]>(initialValue)

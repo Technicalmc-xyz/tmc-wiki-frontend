@@ -2,7 +2,7 @@
 import React, {memo, useEffect, useMemo, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDownload, faFile, faUpload} from "@fortawesome/free-solid-svg-icons";
-import NotAuthenticated from "../NotAuthenticated/NotAuthenticated";
+import NotAuthenticated from "../ErrorPages/NotAuthenticated";
 const Archive = () => {
     const [metadata, setMetadata] = useState([])
     //default state of the fetch getPost is loading

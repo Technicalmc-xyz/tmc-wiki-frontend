@@ -4,16 +4,15 @@ https://colorhunt.co/palette/150168
 */
 /*
 TODO organize this
-TODO dark mode and light mode toggle
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
+/*@import url(https://fonts.googleapis.com/css2?family=Raleway&display=swap);*/
+/*@import url(https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap);*/
 :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
 }
 
 /*default css colors*/
@@ -36,13 +35,13 @@ html {
     --global-jumbo-bg-color: rgba(52, 73, 94, 0.1);
     /*Input form boxes*/
     --global-input-placeholder: silver;
-    --global-input-hover-background: rgba(0,0,0,0.03);
+    --global-input-hover-background: rgba(0, 0, 0, 0.03);
 }
 
 html[data-theme='dark'] {
     /*default font size*/
     --global-font-size: 1rem;
-    font-weight: bold!important;
+    font-weight: bold !important;
     /*default text colors*/
     --global-text-color-primary: #ffffff;
     --global-text-color-secondary: #000000;
@@ -59,15 +58,17 @@ html[data-theme='dark'] {
     --global-jumbo-bg-color: #263859;
     /*Input form boxes*/
     --global-input-placeholder: white;
-    --global-input-hover-background: rgba(38, 56, 89,0.2);
-
-
+    --global-input-hover-background: rgba(38, 56, 89, 0.2);
 }
 
 body {
     margin: 0;
     min-height: 100%;
     min-width: 100%;
+    /*font-family: 'Roboto', sans-serif;*/
+    /*font-family: 'Raleway', sans-serif!important;*/
+    /*font-weight: lighter!important;*/
+    /*font-family: 'Open Sans', sans-serif!important;*/
 }
 
 #page-container {
@@ -80,38 +81,49 @@ body {
 svg {
     color: white;
 }
+
 hr {
-    background: var(--global-text-color-primary)!important;
+    background: var(--global-text-color-primary) !important;
 }
+
 blockquote {
     text-indent: 0.45em;
 }
-blockquote::before{
+
+blockquote::before {
     content: '"';
 }
-blockquote::after{
+
+blockquote::after {
     content: '"';
 }
-.btn{
-    background: var(--global-color-primary)!important;
-    color: white!important;
-    border: none!important;
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 8vh;
+    background: var(--global-bg-color-secondary) !important;
 }
-#book-image {
-    min-height: 3vw;
-    min-width: 3vw;
-    max-height: 10vh;
-    max-width: 10vh;
-    opacity: 100%;
+
+footer a {
+    color: white !important;
 }
-.home {
-    margin-bottom: 5vw;
+
+footer svg {
+    margin: 1rem 1rem;
+}
+
+.btn {
+    background: var(--global-color-primary) !important;
+    color: white !important;
+    border: none !important;
 }
 
 .link {
     text-decoration: none;
     background-image: linear-gradient(currentColor, currentColor);
-    background-position: 0% 100%;
+    background-position: 0 100%;
     background-repeat: no-repeat;
     background-size: 0% 2px;
     transition: background-size .5s;
@@ -122,6 +134,7 @@ blockquote::after{
     background-size: 100% 2px;
 }
 
+/*Nav bar*/
 .navbar {
     background: var(--global-bg-color-secondary);
     box-shadow: 0 0.2vw 1vw var(--global-box-shadow-color);
@@ -141,67 +154,80 @@ a.nav-link {
 .nav-item {
     margin-right: 0.5vw;
 }
+
 .custom-toggler.navbar-toggler {
     border-color: var(--global-text-color-secondary);
 }
-.discord-data {
-    font-size:2em;
-    color: white;
-}
-.discord-avatar {
-    border-radius: 50%;
-    margin-right: 0.5rem;
-}
-
-.discord-discriminator {
-    font-size: 0.4em;
-}
-
-
-/* Setting the stroke to green using rgb values (0, 128, 0) */
 
 .custom-toggler .navbar-toggler-icon {
     background-image: url(
     "data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
+/*Discord Login Styling*/
+.discord-data {
+    font-size: 2em;
+    color: white;
+}
+
+.discord-avatar {
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.discord-profile-avatar {
+    height: 5vw;
+    border-radius: 50%;
+    border: 1px var(--global-text-color-primary) solid;
+}
+
+/*Theme toggle in nav bar*/
+.theme-toggle-switch {
+    width: 3rem;
+    height: 3rem;
+    /*margin-left: 1rem;*/
+    margin-bottom: 0;
+    /*border-radius: 50%;*/
+    /*border: white 1px solid;*/
+}
+
+.theme-toggle-switch svg {
+    height: 2rem !important;
+    width: 2rem !important;
+    transform: translateY(0.5rem) translateX(0.5rem);
+}
+
+.theme-toggle {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+}
+
+.theme-toggle:checked {
+    background: white;
+}
+
+/*Jumbotron on home page*/
 .jumbotron {
     background: var(--global-jumbo-bg-color) !important;
     box-shadow: 0 0.2vw 1vw var(--global-box-shadow-color);
     color: var(--global-text-color-primary);
-
 }
 
-.jumbo-link {
-    margin-right: 1rem;
-    margin-top: 1rem;
-}
-.post-link-jumbo-container {
-    overflow: hidden;
-    box-sizing: border-box;
-}
-.post-link-jumbo {
-    width: 100%;
-    padding-bottom: 1vh;
-    text-decoration: none;
-    /*margin-left: 1vw;*/
-}
-.sort-filter-select {
-    width: 10vw !important;
-    margin-right: 1vw;
-}
-/*Home page categoies box*/
+/*Home page categories box*/
 .categories {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
 }
+
 .categories-item {
     flex: 1 0 20%;
     margin: 5px;
 }
-.categories-item a{
-    color: var(--global-text-color-primary)!important;
+
+.categories-item a {
+    color: var(--global-text-color-primary) !important;
     font-size: larger;
 }
 
@@ -209,37 +235,26 @@ a.nav-link {
     text-decoration: none;
 }
 
-.file-input{
-    display: none;
+.post-link {
+    padding-bottom: 1vh;
+    border-bottom: 1px silver solid;
 }
-.file-input-button {
-    margin-bottom: 1vh;
-    margin-right: 1vw;
+
+.post-link h1 {
+    width: fit-content;
 }
+
+.post-link a:hover {
+    text-decoration: none;
+}
+
+
 .table, .table svg {
-    color: var(--global-text-color-primary)!important;
+    color: var(--global-text-color-primary) !important;
     /*background: var(--global-bg-color-secondary);*/
 }
-.page-footer {
-    background: var(--global-bg-color-secondary);
-    box-shadow: 0 0.2vw 1vw var(--global-box-shadow-color);
-    margin-top: 10vh;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 10rem;
-    /*color: var(--global-text-color-secondary)!important;*/
-    color: white !important;
-}
 
-.page-footer a {
-    /*color: var(--global-text-color-secondary)!important;*/
-    color: white !important;
-}
 
-.footer-icon {
-    margin: 1rem 1rem;
-}
 .editorbar {
     background: var(--global-bg-color-primary);
     padding-bottom: 5px;
@@ -252,6 +267,19 @@ a.nav-link {
     height: 4vw;
     width: 100%;
 }
+/*article styling*/
+.article-header a{
+    color: var(--global-text-color-primary)!important;
+}
+.article-sub-header a{
+    color: var(--global-text-color-primary)!important;
+    font-weight: 700;
+}
+.article-image {
+
+}
+
+/*Form boxes*/
 .form-input {
     position: relative;
     margin: auto;
@@ -259,6 +287,7 @@ a.nav-link {
     border-radius: 3px;
     overflow: hidden;
 }
+
 .form-input .label {
     position: absolute;
     top: 20px;
@@ -272,6 +301,7 @@ a.nav-link {
     pointer-events: none;
     width: 100%;
 }
+
 .form-input .focus-bg {
     position: absolute;
     top: 0;
@@ -299,6 +329,7 @@ a.nav-link {
     color: var(--global-text-color-primary);
     transition: all 0.15s ease;
 }
+
 .form-input input:hover {
     background: var(--global-input-hover-background);
     box-shadow: inset 0 -1px 0 var(--global-color-primary);;
@@ -308,83 +339,67 @@ a.nav-link {
     color: var(--global-input-placeholder);
     transform: translate3d(0, -12px, 0) scale(0.75);
 }
+
 .form-input input:not(:-ms-input-placeholder) + .label {
     color: var(--global-input-placeholder);
     transform: translate3d(0, -12px, 0) scale(0.75);
 }
+
 .form-input input:not(:placeholder-shown) + .label {
     color: var(--global-input-placeholder);
     transform: translate3d(0, -12px, 0) scale(0.75);
 }
+
 .form-input input:focus {
     background: rgba(0, 0, 0, 0.05);
     outline: none;
     box-shadow: inset 0 -2px 0 var(--global-color-primary);
 }
+
 .form-input input:focus + .label {
     color: var(--global-color-primary);
     transform: translate3d(0, -12px, 0) scale(0.75);
 }
+
 .form-input input:focus + .label + .focus-bg {
     transform: scaleX(1);
     transition: all 0.1s ease;
 }
-.custom-select{
-    background: var(--global-bg-color-primary)!important;
-    color: var(--global-text-color-primary)!important;
+
+.custom-select {
+    background: var(--global-bg-color-primary) !important;
+    color: var(--global-text-color-primary) !important;
     margin-bottom: 1vh;
 }
+
 .submit-post input::placeholder {
     color: silver;
 }
+
 .submit-form-button {
     margin-bottom: 10%;
 }
 
-.post-link {
-    padding-bottom: 1vh;
-    border-bottom: 1px silver solid;
+.file-input {
+    display: none;
 }
 
-
-.post-link-title {
-    width: fit-content;
+.file-input-button {
+    margin-bottom: 1vh;
+    margin-right: 1vw;
 }
 
-.post-link a:hover {
-    text-decoration: none;
+/*Sort and filter select fields for posts*/
+.sort-filter-select {
+    width: 10vw !important;
+    margin-right: 1vw;
 }
-
+/*Loading spinner*/
 .spinner-border {
     width: 4rem !important;
     height: 4rem !important;
 }
 
-.theme-toggle-switch {
-    width: 3rem;
-    height: 3rem;
-    /*margin-left: 1rem;*/
-    margin-bottom: 0;
-    /*border-radius: 50%;*/
-    /*border: white 1px solid;*/
-}
-
-
-.theme-toggle-switch svg {
-    height: 2rem !important;
-    width: 2rem !important;
-    transform: translateY(0.5rem) translateX(0.5rem);
-}
-
-.theme-toggle {
-    visibility: hidden;
-    height: 0;
-    width: 0;
-}
-
-.theme-toggle:checked {
-    background: white;
-}
 
 /*Animation Classes*/
 .slide {
@@ -404,6 +419,7 @@ a.nav-link {
     animation: jello 1s;
     transform-origin: center
 }
+
 .box-shadow-animation {
     animation-name: box-shadow-animation;
     animation-duration: 0.7s;
@@ -416,6 +432,7 @@ a.nav-link {
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
 }
+
 /*Animation keyframes*/
 @keyframes slideInDown {
     from {
@@ -427,6 +444,7 @@ a.nav-link {
         transform: translate3d(0, 0, 0);
     }
 }
+
 @keyframes slide-in {
     from {
         opacity: 0;
@@ -479,26 +497,15 @@ a.nav-link {
         transform: none
     }
 }
+
 @keyframes box-shadow-animation {
     0% {
         box-shadow: 0 0 0 white;
     }
     50% {
-        box-shadow: 5px 5px 0px white;
+        box-shadow: 5px 5px 0 white;
     }
     100% {
         box-shadow: 0 0 0 white;
     }
-}
-@keyframes minecraft-text {
-    0% {
-        transform: scale(0.7)rotate(30deg) translateX(-50%) translateY(2rem);
-    }
-    50% {
-        transform: scale(0.9) rotate(30deg) translateX(-50%) translateY(2rem);
-    }
-    100% {
-        transform: scale(0.7)rotate(30deg) translateX(-50%) translateY(2rem);
-    }
-
 }

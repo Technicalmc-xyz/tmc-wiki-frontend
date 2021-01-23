@@ -1,14 +1,12 @@
-//TODO add pagnation
 import React, {memo, useEffect, useMemo, useState} from "react"
 
 const Permissions = () => {
-
     interface User {
-        Username: string;
-        DiscordId: string;
-        Rank: string;
+        id: string;
+        username: string;
+        rank: string;
     }
-    const [userData, setMetadata] = useState([])
+    const [userData, setUserData] = useState([])
     //default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
     const [filterRank, setFilterRank] = useState('all')
@@ -31,7 +29,7 @@ const Permissions = () => {
         const response = await fetch('/api/__getalluserperms__')
         const data = await response.json()
         console.log(data)
-        await setMetadata(data);
+        await setUserData(data);
     };
     const sort = (a, b): number => {
         if (sortType === 'username') {
@@ -68,13 +66,13 @@ const Permissions = () => {
     const userTable = useMemo(() => userData
             .sort((a,b) => sort(a,b))
             .filter(user => user.Rank === filterRank || filterRank === 'all')
-            .map(({Username, DiscordId, Rank}: User) => (
+            .map(({id, username, rank}: User) => (
                     <tr>
-                        <td>{Username}</td>
-                        <td>{DiscordId}</td>
+                        <td>{username}</td>
+                        <td>{id}</td>
                         <td>
-                            <select className="custom-select" defaultValue={Rank} onChange={event => {
-                                handleModify(DiscordId, event.target.value)
+                            <select className="custom-select" defaultValue={rank} onChange={event => {
+                                handleModify(id, event.target.value)
                                 getUsers()
                             }}>
                                 <option value="banned">Banned</option>

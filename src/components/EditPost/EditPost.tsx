@@ -10,7 +10,7 @@ import {withHistory} from 'slate-history'
 import {Toolbar, MarkButton, BlockButton, InsertImageButton, LinkButton, toggleMark} from '../RichUtils'
 import {Element, Leaf, withLinks, withImages} from "../Elements";
 import {useParams} from "react-router";
-import NotAuthenticated from "../NotAuthenticated/NotAuthenticated";
+import NotAuthenticated from "../ErrorPages/NotAuthenticated";
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -223,6 +223,7 @@ const EditPost = () => {
                                 setTags(event.target.value)
                                 setMadeChanges(true)
                             }}
+                            defaultValue={tags}
                             required>
                         <option value="" selected disabled>Select a Category</option>
                         <option value="" disabled>Note: these categories are based off Fallen_Breaths Minecraft Tech Tree v1.3</option>

@@ -5,6 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import ThemeToggle from "./ThemeToggle";
 import {faSignInAlt, faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
 import book from "./Home/img/book.png"
+import { Link } from "react-router-dom";
 
 const Nav = () => {
     const location = useLocation();
@@ -16,13 +17,15 @@ const Nav = () => {
     }, []);
     const [authenticated, setAuthenticated] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState('');
+    const [discordID, setDiscordID] = useState('');
     const getUser = async () => {
         const response = await fetch('/api/__userinfo__');
         const data = await response.json();
         const auth = data.authenticated;
         setAuthenticated(auth);
         if (auth) {
-            setAvatarUrl(data.discordAvatar);
+            setAvatarUrl(data.avatar);
+            setDiscordID(data.id);
         }
     }
     const UserButton: FC = () => {
@@ -30,7 +33,7 @@ const Nav = () => {
             return (
                 <React.Fragment>
                     <li className="nav-item discord-data">
-                        <img src={avatarUrl} alt={"Discord Avatar Not Found"} width={"32"} height={"32"} className={"discord-avatar"}/>
+                        <Link to={"/profile"}><img src={`https://cdn.discordapp.com/avatars/${discordID}/${avatarUrl}.png?size=32`} className={"discord-avatar"} alt={"cannot find profile image"}/></Link>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href={"/api/auth/logout"}><FontAwesomeIcon icon={faSignOutAlt} size={"2x"}/></a>
@@ -49,7 +52,7 @@ const Nav = () => {
     };
     const NewPost: FC = () => {
         if (authenticated) {
-            return <a className="nav-link link" href="/new-post">New Post</a>;
+            return <Link className="nav-link link" to="/new-post">New Post</Link>;
         } else {
             return <a className="nav-link link" href={"/api/auth?redirect=" + encodeURIComponent("/new-post")}>New Post</a>;
         }
@@ -66,18 +69,17 @@ const Nav = () => {
                     <a className="navbar-brand" href="/"><h1 className={"jello"}><img src={book} alt={"book"} height={"50em"} width={"50em"}/></h1></a>
                     <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link link" href="/posts">Posts</a>
+                            <Link className="nav-link link" to="/posts">Posts</Link>
                         </li>
                         <li className="nav-item">
                         <NewPost/>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link link" href="/archive">Archive</a>
+                            <Link className="nav-link link" to="/archive">Archive</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link link" href="/about">About</a>
+                            <Link className="nav-link link" to="/about">About</Link>
                         </li>
-
                     </ul>
                     <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                         <UserButton/>
@@ -85,9 +87,6 @@ const Nav = () => {
                             <ThemeToggle/>
                         </li>
                     </ul>
-
-
-
                 </div>
             </nav>
         </div>

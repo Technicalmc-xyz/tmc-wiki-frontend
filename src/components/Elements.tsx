@@ -3,8 +3,10 @@ import {useFocused, useSelected} from "slate-react";
 import {css} from "emotion";
 import isUrl from "is-url";
 import imageExtensions from 'image-extensions'
-import {Editor, Range, Transforms} from "slate";
-
+import {Node, Editor, Range, Transforms} from "slate";
+import {CopyLinkButton} from "./RichUtils";
+import { HashLink } from 'react-router-hash-link';
+import {Link} from "react-router-dom";
 export const Element = props => {
     const {attributes, children, element} = props
 
@@ -14,9 +16,9 @@ export const Element = props => {
         case 'bulleted-list':
             return <ul {...attributes}>{children}</ul>
         case 'heading-one':
-            return <h1 {...attributes}>{children}</h1>
+            return <Header1Element {...props}/>
         case 'heading-two':
-            return <h2 {...attributes}>{children}</h2>
+            return <Header2Element {...props}/>
         case 'list-item':
             return <li {...attributes}>{children}</li>
         case 'numbered-list':
@@ -54,22 +56,33 @@ export const Leaf = ({attributes, children, leaf}) => {
     return <span {...attributes}>{children}</span>
 }
 
+const Header1Element = ({attributes, children, element}) => {
+    const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
+    return <h2 className={"article-header"} id={anchorId}{...attributes}><HashLink to={"#" + anchorId}>{children}</HashLink><hr/></h2>
+}
+const Header2Element = ({attributes, children, element}) => {
+    const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
+    return <h4 className={"article-sub-header"} id={anchorId}{...attributes}><HashLink to={"#" + anchorId}>{children}</HashLink></h4>
+}
 export const ImageElement = ({attributes, children, element}) => {
     const selected = useSelected()
     const focused = useFocused()
     return (
         <div {...attributes}>
             <div contentEditable={false}>
+                <a href={element.url} rel={"noreferrer noopener"} target={"_blank"}>
                 <img
                     src={element.url}
                     alt={"cannot find"}
                     className={css`
-            display: block;
-            max-width: 100%;
-            max-height: 20em;
-            box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
-          `}
+                      display: block;
+                      max-width: 100%;
+                      max-height: 20em;
+                      border: 1px black solid;
+                      box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
+                     `}
                 />
+                </a>
             </div>
             {children}
         </div>
@@ -78,11 +91,9 @@ export const ImageElement = ({attributes, children, element}) => {
 
 export const withImages = editor => {
     const {insertData, isVoid} = editor
-
     editor.isVoid = element => {
         return element.type === 'image' ? true : isVoid(element)
     }
-
     editor.insertData = data => {
         const text = data.getData('text/plain')
         const {files} = data
@@ -184,3 +195,4 @@ const wrapLink = (editor, url) => {
         Transforms.collapse(editor, {edge: 'end'})
     }
 }
+
