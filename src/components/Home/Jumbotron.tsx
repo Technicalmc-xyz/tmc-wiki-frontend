@@ -4,7 +4,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import book from "./img/book.png"
 import LatestPosts from "../Posts/LatestPosts";
 import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
-import Categories from "./Categories";
 
 const Jumbotron = () => {
     return (
@@ -73,9 +72,7 @@ const Jumbotron = () => {
                                                                                                size={"1x"}/></a>
                     </div>
                 </div>
-
                 <hr/>
-
             </div>
         </div>
     );
