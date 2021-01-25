@@ -185,8 +185,6 @@ export const Toolbar = React.forwardRef(
                   // padding: 1px 18px 0px;
                   // margin: 10 0;
                   margin-bottom: 20px;
-
-
                 `
             )}
         />
@@ -239,6 +237,7 @@ export const BlockButton = ({format, icon}) => {
     const editor = useSlate()
     return (
         <Button
+            data-toggle="tooltip" data-placement="top" title={format}
             active={isBlockActive(editor, format)}
             onMouseDown={event => {
                 event.preventDefault()
@@ -255,6 +254,7 @@ export const MarkButton = ({format, icon}) => {
     return (
         <Button
             active={isMarkActive(editor, format)}
+            data-toggle="tooltip" data-placement="top" title={format}
             onMouseDown={event => {
                 event.preventDefault()
                 toggleMark(editor, format)
@@ -269,6 +269,7 @@ export const LinkButton = () => {
     return (
         <Button
             active={isLinkActive(editor)}
+            data-toggle="tooltip" data-placement="top" title={"link"}
             onMouseDown={event => {
                 event.preventDefault()
                 const url = window.prompt('Enter the URL of the link:')
@@ -285,6 +286,7 @@ export const InsertImageButton = () => {
     const editor = useEditor()
     return (
         <Button
+            data-toggle="tooltip" data-placement="top" title={"image"}
             onMouseDown={event => {
                 event.preventDefault()
                 const url = window.prompt('Enter the URL of the image:')
@@ -298,9 +300,7 @@ export const InsertImageButton = () => {
 }
 
 export const CopyLinkButton = ({text}) => {
-
 // your function to copy here
-
     const copyToClipBoard = async copyMe => {
         try {
             await navigator.clipboard.writeText(copyMe);
