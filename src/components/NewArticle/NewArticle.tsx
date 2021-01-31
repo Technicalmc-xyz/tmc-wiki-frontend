@@ -18,13 +18,13 @@ const HOTKEYS = {
     'mod+`': 'code',
 }
 
-const NewPost = () => {
+const NewArticle = () => {
     useEffect(() => {
         checkAuth().then(() => setCheckedAuth(true)).catch(() => {
             setAuthed(false);
             setCheckedAuth(true);
         });
-    });
+    }, []);
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [tags, setTags] = useState('')
@@ -158,7 +158,7 @@ const NewPost = () => {
                         <span className="label">Description</span>
                         <span className="focus-bg"/>
                     </label>
-                    <select className={"custom-select"}
+                    <select className={"form-select"}
                             onChange={event => {
                                 setTags(event.target.value)
                                 setMadeChanges(true)
@@ -237,4 +237,4 @@ const initialValue = [
     },
 ]
 
-export default NewPost
+export default NewArticle

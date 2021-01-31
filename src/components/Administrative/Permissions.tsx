@@ -71,7 +71,7 @@ const Permissions = () => {
                         <td>{username}</td>
                         <td>{id}</td>
                         <td>
-                            <select className="custom-select" defaultValue={rank} onChange={event => {
+                            <select className="form-select" defaultValue={rank} onChange={event => {
                                 handleModify(id, event.target.value)
                                 getUsers()
                             }}>
@@ -97,8 +97,8 @@ const Permissions = () => {
             .map(({message}) => (
                 <div className="alert alert-warning alert-dismissible fade show" role="alert">
                     {message}
-                    <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={() => handleCloseAlert(message)}>
-                        <span aria-hidden="true">&times;</span>
+                    <button className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => handleCloseAlert(message)}>
+                        <span aria-hidden="true"></span>
                     </button>
                 </div>
                 )
@@ -108,7 +108,7 @@ const Permissions = () => {
     const filterRole = () => {
         return (
             <div>
-                <select className="custom-select sort-filter-select" defaultValue={"all"}
+                <select className="form-select sort-filter-select mt-2" defaultValue={"all"}
                         onChange={event => setFilterRank(event.target.value)}>
                     <option value="all">All</option>
                     <option value="banned">Banned</option>
@@ -118,7 +118,7 @@ const Permissions = () => {
                     <option value="dev">Dev</option>
                     <option value="mod">Mod</option>
                 </select>
-                <select className={"custom-select sort-filter-select"}
+                <select className={"form-select sort-filter-select"}
                         onChange={event => {
                             setSortType(event.target.value)
                         }}>

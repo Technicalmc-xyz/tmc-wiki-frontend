@@ -1,7 +1,7 @@
 //TODO add pagnation
 import React, {memo, useEffect, useMemo, useState} from "react"
 
-const LatestPosts = () => {
+const LatestArticles = () => {
     const [metadata, setMetadata] = useState([])
     // default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
@@ -55,4 +55,4 @@ const LatestPosts = () => {
         </div>
     );
 }
-export default memo(LatestPosts)
+export default memo(LatestArticles)

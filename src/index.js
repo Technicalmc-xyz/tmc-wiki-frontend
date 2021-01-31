@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/js/dist/modal';
+import 'bootstrap/js/dist/tab';
 import * as serviceWorker from './serviceWorker';
 import App from "./App";
 

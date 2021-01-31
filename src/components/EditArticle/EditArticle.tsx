@@ -19,7 +19,7 @@ const HOTKEYS = {
     'mod+`': 'code',
 }
 
-const EditPost = () => {
+const EditArticle = () => {
     // Id of the post
     const {id} = useParams();
 
@@ -96,7 +96,7 @@ const EditPost = () => {
             window.scrollTo({top: 0, left: 0, behavior: "smooth"})
             return;
         }
-        var send_body = JSON.stringify({
+        const send_body = JSON.stringify({
             title: title,
             description: description,
             tags: tags,
@@ -218,7 +218,7 @@ const EditPost = () => {
                         <span className="label">Description</span>
                         <span className="focus-bg"/>
                     </label>
-                    <select className={"custom-select"}
+                    <select className="form-select"
                             onChange={event => {
                                 setTags(event.target.value)
                                 setMadeChanges(true)
@@ -304,7 +304,7 @@ else
                     whole. People like you
                     make this community fun and expanding. Keep up the great work, and we hope to see you again!
                 </p>
-                <a href={"/render-post/" + id}>Check out your changes to post number {id}!</a>
+                <a href={"/render-article/" + id}>Check out your changes to post number {id}!</a>
             </div>
         )
     }
@@ -320,4 +320,4 @@ const initialValue = [
 ,
 ]
 
-export default EditPost
+export default EditArticle

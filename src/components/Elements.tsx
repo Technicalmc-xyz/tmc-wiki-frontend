@@ -5,11 +5,12 @@ import isUrl from "is-url";
 import imageExtensions from 'image-extensions'
 import {Node, Editor, Range, Transforms} from "slate";
 import {CopyLinkButton} from "./RichUtils";
-import { HashLink } from 'react-router-hash-link';
-import {Link} from "react-router-dom";
+import {HashLink} from 'react-router-hash-link';
+import {Link} from 'react-router-dom';
+
+
 export const Element = props => {
     const {attributes, children, element} = props
-
     switch (element.type) {
         case 'block-quote':
             return <blockquote {...attributes}>{children}</blockquote>
@@ -35,7 +36,6 @@ export const Element = props => {
             return <p {...attributes}>{children}</p>
     }
 }
-
 export const Leaf = ({attributes, children, leaf}) => {
     if (leaf.bold) {
         children = <strong>{children}</strong>
@@ -56,13 +56,19 @@ export const Leaf = ({attributes, children, leaf}) => {
     return <span {...attributes}>{children}</span>
 }
 
+
 const Header1Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
-    return <h2 className={"article-header"} id={anchorId}{...attributes}><HashLink to={"#" + anchorId}>{children}</HashLink><hr/></h2>
+    return <h2 className={"article-header"} id={anchorId}{...attributes}><HashLink
+        to={`#${anchorId}`}>{children}</HashLink>
+        <hr/>
+    </h2>
 }
+
 const Header2Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
-    return <h4 className={"article-sub-header"} id={anchorId}{...attributes}><HashLink to={"#" + anchorId}>{children}</HashLink></h4>
+    return <h4 className={"article-sub-header"} id={anchorId}{...attributes}><HashLink
+        to={`#${anchorId}`}>{children}</HashLink></h4>
 }
 export const ImageElement = ({attributes, children, element}) => {
     const selected = useSelected()
@@ -71,17 +77,17 @@ export const ImageElement = ({attributes, children, element}) => {
         <div {...attributes}>
             <div contentEditable={false}>
                 <a href={element.url} rel={"noreferrer noopener"} target={"_blank"}>
-                <img
-                    src={element.url}
-                    alt={"cannot find"}
-                    className={css`
-                      display: block;
-                      max-width: 100%;
-                      max-height: 20em;
-                      border: 1px black solid;
-                      box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
-                     `}
-                />
+                    <img
+                        src={element.url}
+                        alt={"cannot find"}
+                        className={css`
+                          display: block;
+                          max-width: 100%;
+                          max-height: 20em;
+                          border: 1px black solid;
+                          box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
+                        `}
+                    />
                 </a>
             </div>
             {children}
@@ -97,7 +103,6 @@ export const withImages = editor => {
     editor.insertData = data => {
         const text = data.getData('text/plain')
         const {files} = data
-
         if (files && files.length > 0) {
             for (const file of files) {
                 const reader = new FileReader()
@@ -134,11 +139,9 @@ export const insertImage = (editor, url) => {
 }
 export const withLinks = editor => {
     const {insertData, insertText, isInline} = editor
-
     editor.isInline = element => {
         return element.type === 'link' ? true : isInline(element)
     }
-
     editor.insertText = text => {
         if (text && isUrl(text)) {
             wrapLink(editor, text)
@@ -146,7 +149,6 @@ export const withLinks = editor => {
             insertText(text)
         }
     }
-
     editor.insertData = data => {
         const text = data.getData('text/plain')
 
@@ -156,7 +158,6 @@ export const withLinks = editor => {
             insertData(data)
         }
     }
-
     return editor
 }
 

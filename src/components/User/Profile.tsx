@@ -1,20 +1,21 @@
 import React, {useEffect, useState} from "react"
 import NotAuthenticated from "../ErrorPages/NotAuthenticated";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
+import {faSignOutAlt, faUserShield} from "@fortawesome/free-solid-svg-icons";
+import {createInterface} from "readline";
 
 const Profile = () => {
+    const [authenticated, setAuthenticated] = useState(false);
     useEffect(() => {
         getUser().catch(e => console.log(e))
-    }, []);
-    const [authenticated, setAuthenticated] = useState(false);
+    }, [authenticated]);
     const [avatarUrl, setAvatarUrl] = useState('');
     const [userName, setUserName] = useState('')
     const [discordID, setDiscordID] = useState('')
     const [discriminator, setDiscriminator] = useState('')
     const [rank, setRank] = useState('')
-    // const [mcUsername, setMCUsername] = useState('')
-    // const [userDataChanged, setUserDataChanged] = useState(false)
+    const [mcUsername, setMCUsername] = useState('')
+    const [userDataChanged, setUserDataChanged] = useState(false)
     const getUser = async () => {
         const response = await fetch('/api/__userinfo__');
         const data = await response.json();
@@ -27,14 +28,33 @@ const Profile = () => {
             setDiscordID(data.id);
             setDiscriminator(data.discriminator);
             setRank(data.rank);
-            // setMCUsername(data.mcusername);
+            setMCUsername(data.mcusername);
         }
     }
 
-    // const SubmitButton = () => {
-    //     return userDataChanged ? <button type="submit" className="btn btn-primary">Submit</button> : null;
-    // }
+    const SubmitButton = () => {
+        return userDataChanged ? <button type="submit" className="btn btn-primary">Submit</button> : null;
+    }
 
+    interface AdminButtonProps {
+        rank: string
+    }
+
+    const AdminButton = (props: AdminButtonProps) => {
+        if (props.rank === "mod") {
+            return (
+                <div>
+                    <a className={"btn btn-lg mb-3"} href={"/admin"}>Moderate <FontAwesomeIcon icon={faUserShield}
+                                                                                               size={"1x"}/></a>
+                    <hr/>
+                    <a className={"btn btn-lg"}
+                       href={"/api/auth/logout"}>Logout <FontAwesomeIcon icon={faSignOutAlt} size={"1x"}/></a>
+                </div>)
+        } else
+            return <a className={"btn btn-lg submit-form-button mt-3"}
+                      href={"/api/auth/logout"}>Logout <FontAwesomeIcon icon={faSignOutAlt} size={"1x"}/></a>
+
+    }
     if (authenticated) {
         return (
             <div>
@@ -43,19 +63,9 @@ const Profile = () => {
                 <hr/>
                 <h3>{userName}#{discriminator}</h3>
                 <small className="text-muted">{discordID}</small>
-
                 <h5>Rank: {rank}</h5>
-                {/*TODO add form to edit other information about user*/}
-                {/*<form>*/}
-                {/*    <div className="form-group">*/}
-                {/*        <label htmlFor="exampleInputEmail1">Minecraft Username</label>*/}
-                {/*        <input className="form-control" id="exampleInputEmail1"*/}
-                {/*               aria-describedby="mcNa,e" placeholder="Enter Minecraft Username" defaultValue={mcUsername}*/}
-                {/*               onChange={() => setUserDataChanged(true)}/>*/}
-                {/*    </div>*/}
-                {/*    <SubmitButton/>*/}
-                {/*</form>*/}
-                <a className={"btn btn-primary btn-lg submit-form-button"} href={"/api/auth/logout"}>Logout <FontAwesomeIcon icon={faSignOutAlt} size={"1x"}/></a>
+                <AdminButton rank={rank}/>
+
             </div>
         )
     } else return (

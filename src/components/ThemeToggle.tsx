@@ -21,9 +21,6 @@ const ThemeToggle = () => {
                     :<FontAwesomeIcon icon={faSun}/>
                 }
             </label>
-            <div>
-
-            </div>
         </div>
     )
 }

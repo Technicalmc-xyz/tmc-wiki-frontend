@@ -1,8 +1,9 @@
 //TODO add pagnation
-import React, {memo, useEffect, useMemo, useState} from "react"
+import React, {FC, memo, useEffect, useMemo, useState} from "react"
+import {Link} from "react-router-dom"
 
-const Posts = () => {
-    interface Post {
+const Articles = () => {
+    interface Article {
         title: string;
         id: number;
         tags: string;
@@ -15,8 +16,9 @@ const Posts = () => {
     const [fetchState, setFetchState] = useState("loading")
     const [tagFilter, setTagFilter] = useState('all')
     const [sortType, setSortType] = useState('newest')
+    const [compact, setCompact] = useState(false)
     useEffect(() => {
-        getPostMetaData()
+        getArticleMetadata()
             //If the fetch got the data make the state a success
             .then(() => {
                 setFetchState("success")
@@ -27,7 +29,7 @@ const Posts = () => {
             })
     }, []);
 
-    const getPostMetaData = async () => {
+    const getArticleMetadata = async () => {
         const response = await fetch('/api/__listposts__?n=100000') // TODO: implement pages
         const data = await response.json()
         await setMetadata(data);
@@ -36,40 +38,51 @@ const Posts = () => {
     const sort = (a, b): number => {
         if (sortType === 'newest') {
             return b.last_edited - a.last_edited;
-        }
-        else if (sortType === 'oldest') {
+        } else if (sortType === 'oldest') {
             return a.last_edited - b.last_edited;
-        }
-        else if (sortType === 'alphabetic') {
+        } else if (sortType === 'alphabetic') {
             return a.title.localeCompare(b.title)
-        }
-        else if (sortType === 'alphabetic-reverse') {
+        } else if (sortType === 'alphabetic-reverse') {
             return b.title.localeCompare(a.title)
         }
     }
-    const post = useMemo(() => {
+
+    const articleCard = useMemo(() => {
             return metadata
-                .sort((a,b) => sort(a,b))
+                .sort((a, b) => sort(a, b))
                 .filter(filter => filter.tags === tagFilter || tagFilter === 'all')
-                .map(({title, id, tags, last_edited, description}: Post) => (
-                        <div className={"post-link slide"}>
-                            <div className={"post-link-title"}><a href={"/render-post/" + id}><h1
-                                className={"link"}>{title}</h1>
-                            </a></div>
-                            <div>About: {description}</div>
-                            <div>Tags: {tags}</div>
-                            <div>Last updated: {new Date(last_edited).toLocaleString()}</div>
+                .map(({title, id, tags, last_edited, description}: Article) => (
+                        <div>
+                            {compact
+                                ? <div className="card post-link slide-in-up">
+                                    <div className="card-body">
+                                        <h5 className="card-title"><Link className={"link"}
+                                                                         to={`/render-article/${id}`}>{title}</Link>
+                                        </h5>
+                                        <h6 className="card-subtitle mb-2 text-muted">{description}</h6>
+                                    </div>
+                                </div>
+                                : <div className="card post-link slide-in-up">
+                                    <div className="card-body">
+                                        <h5 className="card-title"><Link className={"link"}
+                                                                         to={`/render-article/${id}`}>{title}</Link>
+                                        </h5>
+                                        <h6 className="card-subtitle mb-2 text-muted">{description}</h6>
+                                        <h6 className="card-subtitle mb-2 text-muted">{tags}</h6>
+                                        <h6 className="card-subtitle mb-2 text-muted">{new Date(last_edited).toLocaleString()}</h6>
+                                        <Link to={"/edit-article/" + id} className="link btn">Edit</Link>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     )
-                );
-
+                )
         },
-        [metadata, tagFilter, sortType]);
-
+        [metadata, tagFilter, sortType, compact]);
     const sortAndFilter = () => {
         return (
             <div>
-                <select className={"custom-select sort-filter-select"}
+                <select className={"form-select sort-filter-select"}
                         onChange={event => {
                             setTagFilter(event.target.value)
                         }}>
@@ -90,7 +103,7 @@ const Posts = () => {
                         v1.3
                     </option>
                 </select>
-                <select className={"custom-select sort-filter-select"}
+                <select className={"form-select sort-filter-select"}
                         onChange={event => {
                             setSortType(event.target.value)
                         }}>
@@ -99,6 +112,7 @@ const Posts = () => {
                     <option value="alphabetic">A-Z</option>
                     <option value="alphabetic-reverse">Z-A</option>
                 </select>
+                <button style={{marginBottom: '1vh'}} className={"btn"} onClick={() => setCompact(!compact)}>Compact</button>
             </div>
         );
     }
@@ -122,8 +136,9 @@ const Posts = () => {
     } else return (
         <div>
             {sortAndFilter()}
-            {post}
+
+            {articleCard}
         </div>
     );
 }
-export default memo(Posts)
+export default memo(Articles)

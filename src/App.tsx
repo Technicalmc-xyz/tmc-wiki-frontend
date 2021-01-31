@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useLayoutEffect} from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Home from './components/Home/Home';
-import Posts from './components/Posts/Posts';
-import RenderedPost from "./components/RenderedPost/RenderedPost";
-import EditPost from "./components/EditPost/EditPost";
-import NewPost from "./components/NewPost/NewPost";
+import Posts from './components/Articles/Articles';
+import RenderedArticle from "./components/RenderedArticle/RenderedArticle";
+import EditArticle from "./components/EditArticle/EditArticle";
+import NewArticle from "./components/NewArticle/NewArticle";
 import Archive from "./components/Archive/Archive";
 import About from "./components/About/About";
 import License from './components/License/License';
@@ -12,26 +12,52 @@ import Permissions from "./components/Administrative/Permissions";
 import NotFound from "./components/ErrorPages/NotFound";
 import Profile from "./components/User/Profile";
 import Layout from "./components/layout";
-const App = () => {
+import Admin from "./components/Administrative/Admin";
+
+const App = (): JSX.Element => {
+    useLayoutEffect(() => {
+        //TODO: setTimeout with 0 made it work in Safari - i dont know why
+        setTimeout(() => {
+            const { hash } = window.location
+            if (!hash) return
+            else if (hash) {
+                const id = hash.replace('#', '')
+                const element = document.getElementById(id)
+                if (element) {
+                    element.scrollIntoView({behavior: "smooth", inline: "nearest"});
+                }
+            }
+        }, 100)
+    }, [])
+
     return (
         <Router>
-            <div>
-                <Layout>
-                    <Switch>
-                        <Route exact path='/' component={Home}/>
-                        <Route path='/perms' component={Permissions}/>
-                        <Route path='/profile' component={Profile}/>
-                        <Route exact path='/about' component={About}/>
-                        <Route path='/posts' component={Posts}/>
-                        <Route path='/render-post/:id' component={RenderedPost}/>
-                        <Route path='/new-post' component={NewPost}/>
-                        <Route path='/edit-post/:id' component={EditPost}/>
-                        <Route path='/archive' component={Archive}/>
-                        <Route path='/license' component={License}/>
-                        <Route component={NotFound}/>
-                    </Switch>
-                </Layout>
-            </div>
+            <Layout>
+                <Switch>
+                    {/*Home*/}
+                    <Route exact path='/' component={Home}/>
+
+                    {/*Users*/}
+                    <Route path='/profile' component={Profile}/>
+                    <Route path='/perms' component={Permissions}/>
+
+                    {/*articles*/}
+                    <Route path='/articles' component={Posts}/>
+                    <Route path='/render-article/:id' component={RenderedArticle}/>
+                    <Route path='/new-article' component={NewArticle}/>
+                    <Route path='/edit-article/:id' component={EditArticle}/>
+                    <Route path='/archive' component={Archive}/>
+                    <Route path='category/:tag'/>
+                    <Route path='/admin' component={Admin}/>
+
+                    {/*misc*/}
+                    <Route path='/license' component={License}/>
+                    <Route exact path='/about' component={About}/>
+
+                    {/*404*/}
+                    <Route component={NotFound}/>
+                </Switch>
+            </Layout>
         </Router>
     );
 }

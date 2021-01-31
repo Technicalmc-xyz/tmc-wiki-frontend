@@ -8,7 +8,7 @@ import {
 import {withHistory} from 'slate-history'
 import {useParams} from "react-router";
 import {Element, Leaf, withLinks, withImages} from "../Elements";
-const RenderedPost = () => {
+const RenderedArticle = () => {
     const {id} = useParams();
     const getPost: () => Promise<void> = useCallback(async () => {
         const response = await fetch('/api/__getpost__?id=' + id)
@@ -66,8 +66,8 @@ const RenderedPost = () => {
         )
     }
     const editLink = authenticated
-        ? <a className={"btn btn-lg submit-form-button"} href={"/edit-post/" + id}>Edit Post</a>
-        : <a className={"btn btn-lg submit-form-button"} href={"/api/auth?redirect=" + encodeURIComponent('/edit-post/' + id)}>Login to Edit Post</a>
+        ? <a className={"btn btn-lg submit-form-button"} href={"/edit-article/" + id}>Edit Article</a>
+        : <a className={"btn btn-lg submit-form-button"} href={"/api/auth?redirect=" + encodeURIComponent('/edit-article/' + id)}>Login to Edit Post</a>
     return (
         <div>
             <h1>{title}</h1>
@@ -94,4 +94,4 @@ const initialValue = [
     },
 ]
 
-export default RenderedPost
+export default RenderedArticle
