@@ -2,22 +2,25 @@ import {Editable, Slate, withReact} from "slate-react";
 import {BlockButton, InsertImageButton, LinkButton, MarkButton, toggleMark, Toolbar} from "./RichUtils";
 import isHotkey from "is-hotkey";
 import React, {useCallback, useMemo, useState} from "react";
-import {Element, Leaf, withImages, withLinks} from "./Elements";
+import {Element, Leaf, withImages, withLinks, withFooterLinks} from "./Elements";
 import {withHistory} from "slate-history";
 import {createEditor, Node} from "slate";
+import { Box } from "@chakra-ui/react";
+
 const HOTKEYS = {
     'mod+b': 'bold',
     'mod+i': 'italic',
     'mod+u': 'underline',
     'mod+`': 'code',
 }
+
 interface Props {
     initValue: any;
     placeholder?: string;
     readonly?: boolean
 }
 
-const Slate = (props: Props) => {
+const ArticleEditor = (props: Props) => {
     const [madeChanges, setMadeChanges] = useState(false)
     const [value, setValue] = useState<Node[]>(props.initValue)
     const renderElement = useCallback(props => <Element {...props} />, [])
@@ -27,7 +30,8 @@ const Slate = (props: Props) => {
         []
     )
     return (
-        <Slate
+        <Box mb={"3vh"}>
+            <Slate
             editor={editor}
             value={value}
             onChange={value => {
@@ -37,6 +41,24 @@ const Slate = (props: Props) => {
                 localStorage.setItem('content', content)
             }}
         >
+            {!props.readonly
+                ? <Toolbar>
+                    <MarkButton format="bold" icon="format_bold"/>
+                    <MarkButton format="italic" icon="format_italic"/>
+                    <MarkButton format="underline" icon="format_underlined"/>
+                    <MarkButton format="code" icon="code"/>
+                    <BlockButton format="heading-one" icon="looks_one"/>
+                    <BlockButton format="heading-two" icon="looks_two"/>
+                    <BlockButton format="block-quote" icon="format_quote"/>
+                    <BlockButton format="numbered-list" icon="format_list_numbered"/>
+                    <BlockButton format="bulleted-list" icon="format_list_bulleted"/>
+                    <BlockButton format="footnote" icon="format_list_bulleted"/>
+                    <InsertImageButton/>
+                    <LinkButton/>
+                </Toolbar>
+                : <div/>
+            }
+
             <Editable
                 renderElement={renderElement}
                 renderLeaf={renderLeaf}
@@ -56,5 +78,8 @@ const Slate = (props: Props) => {
 
             />
         </Slate>
+            {/*{withFooterLinks(editor, renderElement)}*/}
+        </Box>
     );
 }
+export default ArticleEditor
