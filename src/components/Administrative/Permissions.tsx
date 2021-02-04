@@ -1,17 +1,34 @@
 import React, {memo, useEffect, useMemo, useState} from "react"
+import {
+    Tbody,
+    Tr,
+    Th,
+    Thead,
+    Table,
+    Td,
+    Select,
+    AlertIcon,
+    Alert,
+    Flex,
+    Box,
+    toast,
+    useToast,
+    Image
+} from "@chakra-ui/react"
 
 const Permissions = () => {
     interface User {
         id: string;
         username: string;
         rank: string;
+        avatar: string;
     }
     const [userData, setUserData] = useState([])
     //default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
     const [filterRank, setFilterRank] = useState('all')
     const [sortType, setSortType] = useState('')
-    const [alertMessages, setAlertMessages] = useState([]);
+    const toast = useToast();
     useEffect(() => {
         getUsers()
             //If the fetch got the data make the state a success
@@ -58,20 +75,32 @@ const Permissions = () => {
             }
         })
             // .then(response => console.log(response.text()))
-            .then(r => r.text())
-            .then(r => setAlertMessages([...alertMessages, {message: r}]))
-
-
+            .then((r) =>r.text())
+            .then((r) =>
+                toast({
+                title: r,
+                position: "top",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            }))
     };
     const userTable = useMemo(() => userData
             .sort((a,b) => sort(a,b))
-            .filter(user => user.Rank === filterRank || filterRank === 'all')
-            .map(({id, username, rank}: User) => (
-                    <tr>
-                        <td>{username}</td>
-                        <td>{id}</td>
-                        <td>
-                            <select className="form-select" defaultValue={rank} onChange={event => {
+            .filter(user => user.rank === filterRank || filterRank === 'all')
+            .map(({id, username, rank, avatar}: User) => (
+                    <Tr>
+                        <Td>
+                            <Image
+                            borderRadius={"full"}
+                            border={"1px"}
+                            src={`https://cdn.discordapp.com/avatars/${id}/${avatar}.png?size=40`}
+                            alt={"cannot find profile image"}/>
+                        </Td>
+                        <Td>{username}</Td>
+                        <Td>{id}</Td>
+                        <Td>
+                            <Select defaultValue={rank} onChange={event => {
                                 handleModify(id, event.target.value)
                                 getUsers()
                             }}>
@@ -81,34 +110,18 @@ const Permissions = () => {
                                 <option value="editor">Editor</option>
                                 <option value="dev">Dev</option>
                                 <option value="mod">Mod</option>
-                            </select>
-                        </td>
-                    </tr>
+                            </Select>
+                        </Td>
+                    </Tr>
                 )
             ),
         [userData, filterRank, sortType]);
 
-    const handleCloseAlert = removeMessage => {
-        setAlertMessages(alertMessages.filter(alert => alert.message !== removeMessage))
-
-    }
-
-    const alerts = useMemo(() => alertMessages
-            .map(({message}) => (
-                <div className="alert alert-warning alert-dismissible fade show" role="alert">
-                    {message}
-                    <button className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={() => handleCloseAlert(message)}>
-                        <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                )
-            ),
-        [alertMessages]);
-
     const filterRole = () => {
         return (
             <div>
-                <select className="form-select sort-filter-select mt-2" defaultValue={"all"}
+                <Select defaultValue={"all"}
+                        mb={2}
                         onChange={event => setFilterRank(event.target.value)}>
                     <option value="all">All</option>
                     <option value="banned">Banned</option>
@@ -117,17 +130,16 @@ const Permissions = () => {
                     <option value="editor">Editor</option>
                     <option value="dev">Dev</option>
                     <option value="mod">Mod</option>
-                </select>
-                <select className={"form-select sort-filter-select"}
+                </Select>
+                <Select
+                    mv={2}
                         onChange={event => {
                             setSortType(event.target.value)
                         }}>
                     <option value="username" selected>Username A-Z</option>
                     <option value="username-reverse">Username Z-A</option>
-                </select>
+                </Select>
             </div>
-
-
         )
     }
     // if the post is still loading just render a loading bar
@@ -142,27 +154,27 @@ const Permissions = () => {
     }
     //if we caught a error send a failed message
     else if (fetchState === "failed") {
-        return (
-            <div className="alert alert-danger" role="alert">Sorry Looks like something is going wrong. Is the API down?
-                Check with Jakku on the Discord.</div>
-        )
+        return(<Alert status="error">
+            <AlertIcon/>
+            Sorry you are not allowed to access this part of the website!
+        </Alert>);
     } else return (
-        <div>
-            {alerts}
+        <Box>
             {filterRole()}
-            <table className="table table-responsive-md">
-                <thead>
-                <tr>
-                    <th scope="col">Username</th>
-                    <th scope="col">DiscordID</th>
-                    <th scope="col">Rank</th>
-                </tr>
-                </thead>
-                <tbody>
+            <Table variant={"striped"}>
+                <Thead>
+                <Tr>
+                    <Th scope="col"/>
+                    <Th scope="col">Username</Th>
+                    <Th scope="col">DiscordID</Th>
+                    <Th scope="col">Rank</Th>
+                </Tr>
+                </Thead>
+                <Tbody>
                 {userTable}
-                </tbody>
-            </table>
-        </div>
+                </Tbody>
+            </Table>
+        </Box>
     );
 }
 export default memo(Permissions)

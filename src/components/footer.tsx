@@ -1,36 +1,43 @@
 import React from "react"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDiscord, faGithub, faReddit} from '@fortawesome/free-brands-svg-icons'
-import {faDollarSign} from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import {Flex, Stack, Heading, Text, Box, HStack, Image, Button, Center, GridItem, Grid, Spacer} from "@chakra-ui/react";
+import book from "./Home/img/book.png";
+import {FiMenu, FiMoon, FiSun} from "react-icons/fi";
+import {AiFillGithub, AiFillRedditCircle, AiFillDollarCircle} from "react-icons/ai";
+import {FaDiscord} from "react-icons/fa";
+import {Search} from "./nav";
 
 const Footer = () => (
-    <footer className="page-footer font-small special-color-dark pt-4">
-        <div>
-            <nav className="list-unstyled list-inline text-center">
-                <a className={"footer-icon"} href="https://github.com/Technicalmc-xyz" target="_blank"
-                   rel="noreferrer noopener">
-                    <FontAwesomeIcon icon={faGithub} size="2x"/>
-                </a>
-                <a className={"footer-icon"} href="https://discord.gg/FcTFg2E" target={"_blank"}
-                   rel={"noreferrer noopener"}>
-                    <FontAwesomeIcon icon={faDiscord} size="2x"/>
-                </a>
-                <a className="footer-icon"
-                   href="https://www.reddit.com/r/technicalminecraft/" target={"_blank"}
-                   rel="noreferrer noopener">
-                    <FontAwesomeIcon icon={faReddit} size="2x" color={""}/>
-                </a>
-                <a className="footer-icon" href="https://streamelements.com/jjakuu/tip"><FontAwesomeIcon
-                    icon={faDollarSign} size={"2x"} target={"_blank"}/></a>
-            </nav>
-        </div>
-        <div className="footer-copyright text-center py-3">
-            <Link className={"link"} rel={"noreferrer noopener"} target={"_blank"}
-               to="/license"> © 2020 Copyright: technicalmc.xyz</Link>
-        </div>
-    </footer>
-)
+    <Flex
+        as="footer"
+        padding="1.5rem"
+        justify={"center"}
+        color="white"
+        bottom={"0"}
+        pos="absolute"
+        width={"100%"}
+        minHeight={"9vh"}
+        maxHeight={"11vh"}
+        justifyContent={"center"}
+        alignItems={"center"}
+    >
+        <Box pr="5">
+            <AiFillGithub size={"40"}/>
+        </Box>
+        <Box pr="5">
+            <AiFillRedditCircle size={"40"}/>
+        </Box>
+        <Box pr="5">
+            <FaDiscord size={"40"}/>
+        </Box>
+        <Box pr="5">
+            <AiFillDollarCircle size={"40"}/>
+        </Box>
+        <Box pr="5">
+            <Search/>
+        </Box>
+    </Flex>
+);
 
 
 export default Footer

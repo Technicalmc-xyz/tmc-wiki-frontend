@@ -2,21 +2,25 @@ import React from "react"
 import Nav from "./nav";
 import Footer from "./footer";
 import PropTypes from "prop-types"
+import {Flex, Box} from "@chakra-ui/react";
 
 const Layout = ({children}) => {
     return (
-        <div id={"page-container"}>
+        <div style={{"minHeight": "100vh"}}>
             <Nav/>
-            <div
+            <Box
                 style={{
                     margin: `5vw auto 0 auto`,
                     maxWidth: 1200,
                     padding: `0 1.0875rem 10rem`,
-                //    padding: `0 1.0875rem 1.45rem`,
                 }}
             >
-                <main id="main">{children}</main>
-            </div>
+                <main
+                    style={{marginBottom: "7vh"}}>
+                    {children}
+                </main>
+
+            </Box>
             <Footer/>
         </div>
     )
@@ -27,3 +31,4 @@ Layout.propTypes = {
 }
 
 export default Layout
+

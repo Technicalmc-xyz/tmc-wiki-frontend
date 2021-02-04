@@ -1,222 +1,289 @@
 import React, {FC, memo, ReactElement, ReactNode, useEffect, useMemo, useState} from "react"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faCheck, faLock, faTrash, faUnlock} from "@fortawesome/free-solid-svg-icons";
+import {
+    Table,
+    Td,
+    Thead,
+    Text,
+    Tr,
+    Th,
+    Button,
+    AlertDialog,
+    AlertDialogOverlay,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogBody,
+    AlertDialogFooter,
+    useDisclosure,
+    AlertDialogCloseButton,
+    useToast,
+    Box, Alert, AlertIcon, Tbody, Input, Badge
+} from "@chakra-ui/react"
+import {FiLock, FiTrash, FiUnlock} from "react-icons/all";
 
+
+const getArticles = async () =>
+    await fetch('/api/__getadminarticles__')
+
+const removeArticle = async (id) => {
+    fetch("/api/__removepost__", {
+        // Adding method type
+        method: "POST",
+        // Adding body or contents to send
+        body: JSON.stringify({
+            id: id,
+        }),
+        // Adding headers to the request
+        headers: {
+            "Content-Type": "application/json",
+            'Accept': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST",
+            "Access-Control-Allow-Headers": "*"
+        }
+    })
+        // .then(response => console.log(response.text()))
+        .then(r => {
+            r.text()
+            console.log(r)
+        })
+};
+const publicizePost = async (id) => {
+    fetch("/api/__publicize__", {
+        // Adding method type
+        method: "POST",
+        // Adding body or contents to send
+        body: JSON.stringify({
+            id: id,
+        }),
+        // Adding headers to the request
+        headers: {
+            "Content-Type": "application/json",
+            'Accept': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST",
+            "Access-Control-Allow-Headers": "*"
+        }
+    })
+        // .then(response => console.log(response.text()))
+        .then(r => {
+            r.text()
+            console.log(r)
+        })
+};
+
+const privatizePost = async (id) => {
+    fetch("/api/__privatize__", {
+        // Adding method type
+        method: "POST",
+        // Adding body or contents to send
+        body: JSON.stringify({
+            id: id,
+        }),
+        // Adding headers to the request
+        headers: {
+            "Content-Type": "application/json",
+            'Accept': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST",
+            "Access-Control-Allow-Headers": "*"
+        }
+    })
+        // .then(response => console.log(response.text()))
+        .then(r => {
+            r.text()
+            console.log(r)
+        })
+
+};
+
+
+interface PublicizeButtonProps {
+    publicized: boolean;
+    title: string;
+    id: string;
+}
 
 const ArticleAdmin = () => {
     const [articleMetadata, setArticleMetadata] = useState([])
     //default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
-    const [filterRank, setFilterRank] = useState('all')
-    const [sortType, setSortType] = useState('')
-    const [alertMessages, setAlertMessages] = useState([]);
+    const [removeTitle, setRemoveTitle] = useState('')
+    const [removeId, setRemoveId] = useState(0)
+    const [isOpen, setIsOpen] = React.useState(false)
+    const onClose = () => setIsOpen(false)
+    const cancelRef = React.useRef()
+    const [update, setUpdate] = useState(0)
+    const [confirmTitle, setConfirmTitle] = useState('');
+    const toast = useToast()
     useEffect(() => {
         getArticles()
             //If the fetch got the data make the state a success
-            .then(() => {
+            .then(async (response) => {
                 setFetchState("success")
+                const data = await response.json()
+                console.log(data)
+                setArticleMetadata(await data);
             })
             //If the fetch was bad set the state of the fecth to failed
             .catch((e) => {
                 console.log(e)
                 setFetchState("failed")
             })
-    }, []);
+    }, [update]);
 
-    const getArticles = async () => {
-        const response = await fetch('/api/__listposts__')
-        const data = await response.json()
-        console.log(data)
-        await setArticleMetadata(data);
-    };
 
-    const removeArticle = async (id) => {
-        fetch("/api/__removepost__", {
-            // Adding method type
-            method: "POST",
-            // Adding body or contents to send
-            body: JSON.stringify({
-                id: id,
-            }),
-            // Adding headers to the request
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json',
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "POST",
-                "Access-Control-Allow-Headers": "*"
-            }
-        })
-            // .then(response => console.log(response.text()))
-            .then(r => {
-                r.text()
-                console.log(r)
-            })
-    };
-    const publicizePost = (id) => {
-        fetch("/api/__publicize__", {
-            // Adding method type
-            method: "POST",
-            // Adding body or contents to send
-            body: JSON.stringify({
-                id: id,
-            }),
-            // Adding headers to the request
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json',
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "POST",
-                "Access-Control-Allow-Headers": "*"
-            }
-        })
-            // .then(response => console.log(response.text()))
-            .then(r => {
-                r.text()
-                console.log(r)
-            })
-    };
-
-    const privatizePost = async (id) => {
-        fetch("/api/__privatize__", {
-            // Adding method type
-            method: "POST",
-            // Adding body or contents to send
-            body: JSON.stringify({
-                id: id,
-            }),
-            // Adding headers to the request
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json',
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "POST",
-                "Access-Control-Allow-Headers": "*"
-            }
-        })
-            // .then(response => console.log(response.text()))
-            .then(r => {
-                r.text()
-                console.log(r)
-            })
-    };
-    const sort = (a, b): number => {
-            return a.title.localeCompare(b.title)
-
+    const StatusBadge = (status) => {
+        console.log(status)
+        if (status.status)
+            return <Badge colorScheme="purple">New</Badge>
+        else
+            return <></>
     }
-    interface AlertProps {
-        id: number;
-        title: string;
-    }
-
-    const Alert = (props: AlertProps) => {
-        const [confirmTitle, setConfirmTitle] = useState("")
-        return (
-            <div className="modal fade" id={`${props.title}${props.id}`} data-bs-backdrop="static"
-                 data-bs-keyboard="false"
-                 tabIndex={-1} aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="staticBackdropLabel">
-                                Remove post number <strong>{props.id}</strong> - <strong>{props.title}</strong></h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"/>
-                        </div>
-                        <div className="modal-body">
-
-                            <div className="mb-3">
-                                <label htmlFor="exampleInputEmail1"
-                                       className="form-label"><strong>{props.title}</strong></label>
-                                <input className="form-control"
-                                       aria-describedby="emailHelp"
-                                       onChange={event => setConfirmTitle(event.target.value)}/>
-                                <div id="emailHelp" className="form-text">Please write the name of the post to confirm
-                                    its permanent removal
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <label className="form-label">This action is permanent and will delete this
-                                post <strong>forever</strong></label>
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            {confirmTitle === props.title
-                                ? <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
-                                    removeArticle(props.id).catch(r => console.log(r))
-                                }}>Understood</button>
-                                : <button type="button" className="btn btn-primary disabled">Understood</button>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>);
-    }
-
-    const articleTable = useMemo(() => articleMetadata
-            .sort((a,b) => sort(a,b))
-            .map(({id, last_edited, tag, title, description, status}) => (
-                    <tr>
-                        <th scope="row">{id}</th>
-                        <td>{title}</td>
-                        <td>{description}</td>
-                        <td>{tag}</td>
-                        <td>{new Date(last_edited).toLocaleString()}</td>
-                        <td>{status}</td>
-                        <td>
-                            <button className={"btn"} data-bs-toggle="modal" data-bs-target={`#${title}${id}`}><FontAwesomeIcon
-                                icon={faTrash}/></button>
-                        </td>
-                        <td>
-                            <button className={"btn bg-danger"}>
-                                <FontAwesomeIcon
-                                    onClick={() => {privatizePost(id)}}
-                                    icon={faLock}/></button>
-                        </td>
-                        <td>
-                            <button className={"btn bg-success"}><FontAwesomeIcon
-                                onClick={() => {publicizePost(id)}} icon={faUnlock}/></button>
-                        </td>
-                        <Alert id={id} title={title}/>
-                    </tr>
-                )
-            ),
-        [articleMetadata, filterRank, sortType]);
-    if (fetchState === "loading") {
-        return (
-            <div className="d-flex justify-content-center">
-                <div className="spinner-border" role="status">
-                    <span className="sr-only">Loading...</span>
-                </div>
+    const PublicizeButton = (props: PublicizeButtonProps) => {
+        if (props.publicized) {
+            return (
+                <Button bg={"green"} onClick={() => {
+                    privatizePost(props.id).then(() => setUpdate(update + 1))
+                    toast({
+                        title: `Privatized "${props.title}"`,
+                        description: "This article is no longer available to the public",
+                        position: "top",
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
+                    })
+                    setUpdate(update + 1)
+                }}><FiUnlock color={"white"}/></Button>
+            )
+        } else {
+            return (
+                <Button bg={"orange"} onClick={() => {
+                    publicizePost(props.id).then(() => setUpdate(update + 1))
+                    toast({
+                        title: `Publicized "${props.title}"`,
+                        description: "This article is now available to the public",
+                        position: "top",
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
+                    })
+                }}><FiLock color={"white"}/></Button>
+            )
+        }
+}
+const articleTable = useMemo(() => articleMetadata
+        .map(({id, last_edited, tag, title, description, publicized, status}) => (
+                <Tr>
+                    <Td isNumeric><StatusBadge status={status}/> {id}</Td>
+                    <Td>{title}</Td>
+                    <Td>{description}</Td>
+                    <Td>{tag}</Td>
+                    <Td>{new Date(last_edited).toLocaleString()}</Td>
+                    <Td>
+                        <Button bg={"red"} onClick={() => {
+                            setIsOpen(true);
+                            setRemoveTitle(title);
+                            setRemoveId(id);
+                        }
+                        }><FiTrash color={"white"}/></Button>
+                    </Td>
+                    <Td>
+                        <PublicizeButton publicized={publicized} title={title} id={id}/>
+                    </Td>
+                </Tr>
+            )
+        ),
+    [articleMetadata]);
+if (fetchState === "loading") {
+    return (
+        <div className="d-flex justify-content-center">
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
             </div>
-        )
-    }
-    //if we caught a error send a failed message
-    else if (fetchState === "failed") {
-        return (
-            <div className="alert alert-danger" role="alert">Sorry Looks like something is going wrong. Is the API down?
-                Check with Jakku on the Discord.</div>
-        )
-    } else return (
-        <div>
-            <table className="table table-responsive-md">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Tag</th>
-                    <th scope="col">Last Edited</th>
-                    <th scope="col"/>
-                    <th scope="col"/>
-                    <th scope="col"/>
-                </tr>
-                </thead>
-                <tbody>
-                {articleTable}
-                </tbody>
-            </table>
         </div>
-    );
+    )
+}
+//if we caught a error send a failed message
+else if (fetchState === "failed") {
+    return (<Alert status="error">
+        <AlertIcon/>
+        Sorry you are not allowed to access this part of the website!
+    </Alert>);
+
+} else return (
+    <Box>
+        <>
+            <AlertDialog
+                isOpen={isOpen}
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete article "{removeTitle}"
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            Are you sure? You can't undo this action afterwards.
+                        </AlertDialogBody>
+                        <AlertDialogBody>
+                            <Text size={"sm"} mb={3}>
+                                Please confirm by typing the title of the article you want to remove
+                            </Text>
+                            <Input
+                                type={"text"}
+                                onChange={(event) => {
+                                    setConfirmTitle(event.target.value)
+                                }}
+                            />
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>
+                                Cancel
+                            </Button>
+                            {confirmTitle === removeTitle
+                                ? <Button colorScheme="red" onClick={() => {
+                                    removeArticle(removeId).then(() => setUpdate(update + 1))
+                                    toast({
+                                        title: `Removed "${removeTitle}"`,
+                                        description: "This article has been permanently deleted",
+                                        position: "top",
+                                        status: "success",
+                                        duration: 5000,
+                                        isClosable: true,
+                                    })
+                                    onClose()
+                                }} ml={3}>
+                                    Delete
+                                </Button>
+                                : <Button colorScheme="red" disabled ml={3}>
+                                    Delete
+                                </Button>
+                            }
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+        </>
+        <Table variant="striped">
+            <Thead>
+                <Tr>
+                    <Th>#</Th>
+                    <Th>Title</Th>
+                    <Th>Description</Th>
+                    <Th>Tag</Th>
+                    <Th>Last Edited</Th>
+                    <Th>Delete</Th>
+                    <Th>Publicize/ Privatize</Th>
+                </Tr>
+            </Thead>
+            <Tbody>
+                {articleTable}
+            </Tbody>
+        </Table>
+    </Box>
+);
 }
 export default memo(ArticleAdmin);
 

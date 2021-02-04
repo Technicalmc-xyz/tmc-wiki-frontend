@@ -1,13 +1,114 @@
-import React, {FC, useEffect, useState} from "react"
-import {useLocation} from "react-router";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import React, {FC, ReactNode, useEffect, useState} from "react"
+import book from "./Home/img/book.png";
+import {
+    Box,
+    Text,
+    Stack,
+    Flex,
+    Button,
+    Heading,
+    Image,
+    ColorModeScript,
+    useColorMode,
+    useDisclosure,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
+    DrawerHeader,
+    DrawerBody,
+    Input,
+    DrawerFooter,
+    Drawer,
+    Center,
+    Tooltip
+} from "@chakra-ui/react"
+import {Link, useLocation} from "react-router-dom";
 
-import ThemeToggle from "./ThemeToggle";
-import {faSignInAlt, faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
-import book from "./Home/img/book.png"
-import {Link} from "react-router-dom";
+import {FiLogIn, FiLogOut, FiMenu, FiMoon, FiSun} from 'react-icons/fi'
 
-const Nav = () => {
+
+const MenuItems = ({children, to}) => (
+    <Link to={to}>
+        <Text mt={{base: 4, md: 0}} mr={4} ml={4} display="block">
+            {children}
+        </Text>
+    </Link>
+
+);
+
+interface UserProps {
+    authenticated: boolean;
+    id: string;
+    avatar: string;
+    location: string;
+}
+
+export const Search = () => {
+    const {isOpen, onOpen, onClose} = useDisclosure()
+    const btnRef = React.useRef()
+    return (
+        <>
+                <Button ref={btnRef} colorScheme="teal" onClick={onOpen} mr={3} variant={"outline"} disabled>
+                    Search
+                </Button>
+
+            <Drawer
+                isOpen={isOpen}
+                placement="right"
+                onClose={onClose}
+                finalFocusRef={btnRef}
+            >
+                <DrawerOverlay>
+                    <DrawerContent>
+                        <DrawerCloseButton/>
+                        <DrawerHeader>Search </DrawerHeader>
+
+                        <DrawerBody>
+                            <Input autoFocus={true} placeholder="Type here..."/>
+                        </DrawerBody>
+
+                        <DrawerFooter>
+                            <Button variant="outline" mr={3} onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button color="green">Search</Button>
+                        </DrawerFooter>
+                    </DrawerContent>
+                </DrawerOverlay>
+            </Drawer>
+        </>
+    )
+}
+
+const UserButton = (props: UserProps) => {
+    if (props.authenticated) {
+        return (
+            <React.Fragment>
+
+                <Link to={"/profile"}>
+                    <Image
+                        mr={2}
+                        borderRadius={"full"}
+                        border={"1px"}
+                        src={`https://cdn.discordapp.com/avatars/${props.id}/${props.avatar}.png?size=40`}
+                        alt={"cannot find profile image"}/>
+                </Link>
+                <a href={"/api/auth/logout"}><Button mr={2} variant={"outline"}><FiLogOut size={"25"}/></Button></a>
+            </React.Fragment>
+        )
+    } else {
+        return (
+            <a href={"/api/auth?redirect=" + encodeURIComponent(props.location)}><Button mr={2}
+                                                                                         variant={"outline"}><FiLogIn
+                size={"25"}/></Button></a>
+
+        );
+    }
+};
+const Nav = props => {
+    const {colorMode, toggleColorMode} = useColorMode()
+    const [show, setShow] = React.useState(false);
+    const [isOpen, setIsOpen] = useState(false)
     const location = useLocation();
     useEffect(() => {
         getUser()
@@ -28,76 +129,59 @@ const Nav = () => {
             setDiscordID(data.id);
         }
     }
-    const UserButton: FC = () => {
-        if (authenticated) {
-            return (
-                <React.Fragment>
-                    <li className="nav-item discord-data">
-                        <Link to={"/profile"}><img
-                            src={`https://cdn.discordapp.com/avatars/${discordID}/${avatarUrl}.png?size=32`}
-                            className={"discord-avatar"} alt={"cannot find profile image"}/></Link>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href={"/api/auth/logout"}><FontAwesomeIcon icon={faSignOutAlt}
-                                                                                           size={"2x"}/></a>
-                    </li>
-                </React.Fragment>
-            )
-        } else {
-            return (
-                <React.Fragment>
-                    <li className="nav-item">
-                        <a className="nav-link"
-                           href={"/api/auth?redirect=" + encodeURIComponent(location.pathname)}><FontAwesomeIcon
-                            icon={faSignInAlt} size={"2x"}/></a>
-                    </li>
-                </React.Fragment>
-            )
-        }
-    };
-    const NewArticle: FC = () => {
-        if (authenticated) {
-            return <Link className="nav-link link" to="/new-article">New Article</Link>;
-        } else {
-            return <a className="nav-link link" href={"/api/auth?redirect=" + encodeURIComponent("/new-article")}>New
-                Article</a>;
-        }
-    }
     return (
-        <div>
-            <nav className="navbar navbar-expand-lg">
-                <div className="container-fluid">
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"/>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-                        <a className="navbar-brand" href="/"><h1 className={"jello"}><img src={book} alt={"book"} height={"50em"} width={"50em"}/></h1></a>
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <Link className="nav-link link" to="/articles">Articles</Link>
-                            </li>
-                            <li className="nav-item">
-                                <NewArticle/>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link link" to="/archive">Archive</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link link" to="/about">About</Link>
-                            </li>
-                        </ul>
-                        <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-                            <UserButton/>
-                            <li>
-                                <ThemeToggle/>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    )
-}
+        <Flex
+            as="nav"
+            align="center"
+            justify="space-between"
+            wrap="wrap"
+            padding="1.5rem"
+            color="white"
+            {...props}
+        >
+            <Flex align="center" mr={5}>
+                <Link to={"/"}>
+                    <Image
+                        boxSize="40px"
+                        src={book}
+                        alt={"book"}
+                    />
+                </Link>
+            </Flex>
+
+            <Box display={{base: "block", md: "none"}} onClick={() => {
+                setIsOpen(!isOpen)
+                setShow(!show)
+            }}>
+                <FiMenu size={"25"}/>
+            </Box>
+
+            <Box
+                display={{sm: show ? "block" : "none", md: "flex"}}
+                width={{sm: "full", md: "auto"}}
+                alignItems="center"
+                flexGrow={1}
+            >
+                <MenuItems to={"/articles"}>Articles</MenuItems>
+                <MenuItems to={"/new-article"}>New Article</MenuItems>
+                <MenuItems to={"/archive"}>Archive</MenuItems>
+                <MenuItems to={"about"}>About</MenuItems>
+            </Box>
+
+            <Box
+                display={{sm: show ? "block" : "none", md: "flex"}}
+                mt={{base: 4, md: 0}}
+            >
+                <Search/>
+                <UserButton authenticated={authenticated} id={discordID} avatar={avatarUrl}
+                            location={location.pathname}/>
+                <Button onClick={toggleColorMode} variant={"outline"}>
+                    {colorMode === "light" ? <FiMoon size={"30"}/> : <FiSun size={"30"}/>}
+                </Button>
+            </Box>
+        </Flex>
+    );
+};
+
+
 export default Nav
