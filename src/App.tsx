@@ -9,7 +9,7 @@ import Archive from "./components/Archive/Archive";
 import About from "./components/About/About";
 import License from './components/License/License';
 import Permissions from "./components/Administrative/Permissions";
-import NotFound from "./components/ErrorPages/NotFound";
+import NotFound from "./components/NotFound";
 import Profile from "./components/User/Profile";
 import Layout from "./components/layout";
 import Admin from "./components/Administrative/Admin";
