@@ -1,5 +1,5 @@
 import React from "react";
-import book from "../Home/img/book.png"
+import book from "./Home/img/book.png"
 
 const NotFound = () => {
     return (

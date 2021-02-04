@@ -1,18 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/js/dist/modal';
-import 'bootstrap/js/dist/tab';
+import {ChakraProvider, ColorModeScript} from "@chakra-ui/react";
+import theme from "./theme"
 import * as serviceWorker from './serviceWorker';
 import App from "./App";
 
 ReactDOM.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <App/>
-        </BrowserRouter>
+        <ChakraProvider theme={theme}>
+            <BrowserRouter>
+                <ColorModeScript initialColorMode={theme.config.initialColorMode}/>
+                    <App/>
+            </BrowserRouter>
+        </ChakraProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );
