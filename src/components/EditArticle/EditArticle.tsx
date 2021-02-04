@@ -1,23 +1,22 @@
-import React, {useState, useMemo, useCallback, useEffect, FC} from 'react'
-import isHotkey from 'is-hotkey'
+import React, {useState, useMemo, useCallback, useEffect, FC, memo} from 'react'
 import {Node, createEditor} from 'slate'
-import {
-    Slate,
-    Editable,
-    withReact,
-} from 'slate-react'
-import {withHistory} from 'slate-history'
-import {Toolbar, MarkButton, BlockButton, InsertImageButton, LinkButton, toggleMark} from '../RichUtils'
-import {Element, Leaf, withLinks, withImages} from "../Elements";
 import {useParams} from "react-router";
-import NotAuthenticated from "../ErrorPages/NotAuthenticated";
+import {
+    FormControl,
+    Input,
+    Select,
+    Spinner,
+    Flex,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    Alert,
+    Box,
+    Button
+} from '@chakra-ui/react'
+import ArticleEditor from "../ArticleEditor";
+import {Link} from "react-router-dom";
 
-const HOTKEYS = {
-    'mod+b': 'bold',
-    'mod+i': 'italic',
-    'mod+u': 'underline',
-    'mod+`': 'code',
-}
 
 const EditArticle = () => {
     // Id of the post
@@ -75,16 +74,13 @@ const EditArticle = () => {
     const [success, setSuccess] = useState(false);
     //Slate.js editor states
     const [value, setValue] = useState<Node[]>(initialValue)
-    const renderElement = useCallback(props => <Element {...props} />, [])
-    const renderLeaf = useCallback(props => <Leaf {...props} />, [])
-    const editor = useMemo(
-        () => withImages(withLinks(withHistory(withReact(createEditor())))),
-        []
-    )
 
 
     if (checkedAuth && !authed) {
-        return <NotAuthenticated/>
+        return <Alert status="error">
+            <AlertIcon/>
+            You must be logged in before editing an article
+        </Alert>
     }
 
     const submitPost = (event) => {
@@ -150,9 +146,7 @@ const EditArticle = () => {
     const SubmitButton: FC = () => {
         if (madeChanges && signOff) {
             return (
-                <button className={"btn btn-primary btn-lg submit-form-button"}
-                        onClick={submitPost}>Submit Edits
-                </button>
+                <Button onClick={submitPost}>Submit Edits</Button>
             );
         } else {
             return null;
@@ -161,11 +155,7 @@ const EditArticle = () => {
     // if the post is still loading just render a loading bar
     if (fetchState === "loading") {
         return (
-            <div className="d-flex justify-content-center">
-                <div className="spinner-border" role="status">
-                    <span className="sr-only">Loading...</span>
-                </div>
-            </div>
+            <Spinner size="xl"/>
         )
     }
     //if we caught a error send a failed message
@@ -175,58 +165,64 @@ const EditArticle = () => {
                 this post exists? Is the API down? Check with Jakku on the Discord.</div>
         )
     }
-    if (!success) {
+    if (success) {
         return (
-            <Slate
-                editor={editor}
-                value={value}
-                onChange={value => {
-                    setValue(value)
-                    setMadeChanges(true)
-                    const content = JSON.stringify(value)
-                    localStorage.setItem('content', content)
-                }}
+            <Alert
+                status="success"
+                variant="subtle"
+                flexDirection="column"
             >
-                <form className={"submit-post"}>
-                    <FailedPost/>
-                    <label className={"form-input"}>
-                        <input
-                            type={"text"}
-                            className={"form-input"}
-                            onChange={event => {
-                                setTitle(event.target.value)
-                                setMadeChanges(true)
-                            }}
-                            name={"title"}
-                            placeholder="&nbsp;"
-                            defaultValue={title}
-                            required/>
-                        <span className="label">Title</span>
-                        <span className="focus-bg"/>
-                    </label>
-                    <label className={"form-input"}>
-                        <input type={"text"}
-                               className={"form-input"}
-                               onChange={event => {
-                                   setDescription(event.target.value)
-                                   setMadeChanges(true)
-                               }}
-                               placeholder="&nbsp;"
-                               name={"description"}
-                               defaultValue={description}
-                               required/>
-                        <span className="label">Description</span>
-                        <span className="focus-bg"/>
-                    </label>
-                    <select className="form-select"
-                            onChange={event => {
-                                setTags(event.target.value)
-                                setMadeChanges(true)
-                            }}
-                            defaultValue={tags}
-                            required>
+                <AlertIcon boxSize="50px" mr={0}/>
+                <AlertTitle mt={4} mb={1} fontSize="lg">
+                    Article Submitted!
+                </AlertTitle>
+                <AlertDescription maxWidth="sm">
+                    Thank you for your edit! We appreciate deeply your contribution to this wiki. If you would like the
+                    poster
+                    role on the discord just ping one of the moderators!
+                    <u><Link to={`/render-article/${id}`}></Link></u>
+                </AlertDescription>
+            </Alert>
+        )
+
+    } else {
+        return (
+            <div>
+                <FormControl>
+                    <Input
+                        mb={2}
+                        type={"text"}
+                        variant="flushed"
+                        onChange={event => {
+                            setTitle(event.target.value)
+                            setMadeChanges(true)
+                        }}
+                        name={"title"}
+                        placeholder="Title"
+                        defaultValue={title}
+                        isRequired={true}
+                    />
+                    <Input mb={2}
+                           type={"text"}
+                           variant="flushed"
+                           onChange={event => {
+                               setDescription(event.target.value)
+                               setMadeChanges(true)
+                           }}
+                           placeholder="Description"
+                           name="description"
+                           defaultValue={description}
+                           isRequired={true}
+                    />
+                    <Select
+                        mb={10}
+                        selected={tags}
+                        onChange={event => {
+                            setTags(event.target.value)
+                            setMadeChanges(true)
+                        }}
+                        required>
                         <option value="" selected disabled>Select a Category</option>
-                        <option value="" disabled>Note: these categories are based off Fallen_Breaths Minecraft Tech Tree v1.3</option>
                         <option value="Block Resource">Block Resource</option>
                         <option value="Block Farming">Block Farming</option>
                         <option value="Mob Resource">Mob Resource</option>
@@ -239,72 +235,31 @@ const EditArticle = () => {
                         </option>
                         <option value="Duplicate">Duplicate</option>
                         <option value="Community">Community</option>
-                    </select>
-                    <Toolbar>
-                        <MarkButton format="bold" icon="format_bold"/>
-                        <MarkButton format="italic" icon="format_italic"/>
-                        <MarkButton format="underline" icon="format_underlined"/>
-                        <MarkButton format="code" icon="code"/>
-                        <BlockButton format="heading-one" icon="looks_one"/>
-                        <BlockButton format="heading-two" icon="looks_two"/>
-                        <BlockButton format="block-quote" icon="format_quote"/>
-                        <BlockButton format="numbered-list" icon="format_list_numbered"/>
-                        <BlockButton format="bulleted-list" icon="format_list_bulleted"/>
-                        <InsertImageButton/>
-                        <LinkButton/>
-                    </Toolbar>
-                    <Editable
-                        className={"editor"}
-                        renderElement={renderElement}
-                        renderLeaf={renderLeaf}
-                        placeholder="Enter some rich text…"
-                        spellCheck
-                        autoFocus
-                        onKeyDown={event => {
-                            for (const hotkey in HOTKEYS) {
-                                if (isHotkey(hotkey, event as any)) {
-                                    event.preventDefault()
-                                    const mark = HOTKEYS[hotkey]
-                                    toggleMark(editor, mark)
-                                }
-                            }
-                        }}
-                    />
-                    <label className={"form-input"}>
-                        <input type={"text"}
-                               onChange={event => {
-                                   setMessage(event.target.value);
-                                   setSignOff(true);
-                               }}
-                               id={"form-input"}
-                               placeholder="&nbsp;"
-                               name={"message"}
-                               required/>
-                        <span className="label">Describe what you changed</span>
-                        <span className="focus-bg"/>
-                    </label>
-                    {signOff
-                        ? <div/>
-                        : <div className="alert alert-warning" role="alert">Please provide an edit message of what you changed before submitting.</div>
-                    }
-                    <div className={"spacing-block"}/>
-                    <SubmitButton/>
 
-                </form>
-            </Slate>
-        )
-    }
-else
-    {
-        return (
-            <div className="alert alert-success" role="alert">
-                <h4 className="alert-heading">Success!</h4>
-                <hr/>
-                <p>We appreciate your contribution to not only the technical minecraft wiki, but also the community as a
-                    whole. People like you
-                    make this community fun and expanding. Keep up the great work, and we hope to see you again!
-                </p>
-                <a href={"/render-article/" + id}>Check out your changes to post number {id}!</a>
+                    </Select>
+                </FormControl>
+                <ArticleEditor initValue={value} readonly={false} placeholder={"Start writing ..."}/>
+                <Input
+                    mb={2}
+                    type={"text"}
+                    variant="flushed"
+                    onChange={event => {
+                        setMessage(event.target.value);
+                        setSignOff(true);
+                    }}
+                    placeholder={"Describe what you changed"}
+                    name={"message"}
+                    required/>
+                {signOff
+                    ? <div/>
+                    : <Alert status="warning">
+                        <AlertIcon/>
+                        Please provide an edit message of what you changed before submitting.
+                    </Alert>
+
+
+                }
+                <SubmitButton/>
             </div>
         )
     }
@@ -317,7 +272,7 @@ const initialValue = [
             {text: ''},
         ],
     }
-,
+    ,
 ]
 
-export default EditArticle
+export default memo(EditArticle);

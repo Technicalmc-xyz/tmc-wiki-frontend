@@ -4,6 +4,7 @@ import {cx, css} from 'emotion'
 import {Editor, Transforms} from "slate";
 import {useEditor, useSlate} from "slate-react";
 import {insertImage, insertLink, isLinkActive} from "./Elements";
+import {useColorModeValue} from '@chakra-ui/react';
 
 interface BaseProps {
     className: string
@@ -173,22 +174,24 @@ export const Toolbar = React.forwardRef(
     (
         {className, ...props}: PropsWithChildren<BaseProps>,
         ref: Ref<OrNull<HTMLDivElement>>
-    ) => (
-        <Menu
-            {...props}
-            ref={ref}
-            className={cx(
-                className, "editorbar",
-                css`
-                  position: sticky;
-                  top: 0;
-                  // padding: 1px 18px 0px;
-                  // margin: 10 0;
-                  margin-bottom: 20px;
-                `
-            )}
-        />
-    )
+    ) => {
+        const bg = useColorModeValue("#FFFFFF", "#1A202B")
+        return (
+            <Menu
+                {...props}
+                ref={ref}
+                style={{background: bg, paddingTop: "10px",paddingBottom: "10px"}}
+                className={cx(
+                    className, "editorbar",
+                    css`
+                      position: sticky;
+                      top: 0;
+                      margin-bottom: 20px;
+                    `
+                )}
+            />
+        )
+    }
 )
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
 export const toggleBlock = (editor, format) => {
@@ -309,8 +312,8 @@ export const CopyLinkButton = ({text}) => {
         }
     };
     return (
-            <Button onClick={() => copyToClipBoard(text)}>
-                <Icon>link</Icon>
-            </Button>
+        <Button onClick={() => copyToClipBoard(text)}>
+            <Icon>link</Icon>
+        </Button>
     )
 }

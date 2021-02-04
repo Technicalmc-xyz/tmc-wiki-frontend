@@ -2,14 +2,15 @@ import React, {useState, useMemo, useCallback, useEffect} from 'react'
 import isHotkey from 'is-hotkey'
 import {Node, createEditor} from 'slate'
 import {
-    Slate,
-    Editable,
-    withReact,
+    withReact
 } from 'slate-react'
 import {withHistory} from 'slate-history'
-import {Toolbar, MarkButton, BlockButton, InsertImageButton, LinkButton, toggleMark, CopyLinkButton} from '../RichUtils'
+
 import {Element, Leaf, withLinks, withImages} from "../Elements";
-import NotAuthenticated from "../ErrorPages/NotAuthenticated";
+import ArticleEditor from "../ArticleEditor";
+import {FormControl, Input, Select, Box, Button, AlertIcon, AlertTitle, AlertDescription, Alert} from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
+
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -49,7 +50,13 @@ const NewArticle = () => {
     };
 
     if (checkedAuth && !authed) {
-        return <NotAuthenticated/>
+        return <Box>
+            <Alert status="error">
+                <AlertIcon />
+                You must be logged in before creating an article
+            </Alert>
+            <a href={"/api/auth"}><Button mt={4}>Login</Button></a>
+        </Box>
     }
 
     const submitPost = () => {
@@ -106,64 +113,65 @@ const NewArticle = () => {
     const SubmitButton = () => {
         if (madeChanges) {
             return (
-                <button className={"btn btn-primary btn-lg submit-form-button"}
-                        onClick={submitPost}>Create Post
-                </button>
+                <Button mt={10} onClick={submitPost}>Create Post</Button>
             );
-        } else {
+        } else
             return null;
-        }
     }
 
-    if (!success) {
+    if (success) {
         return (
-            <Slate
-                editor={editor}
-                value={value}
-                onChange={value => {
-                    setValue(value)
-                    setMadeChanges(true)
-                    const content = JSON.stringify(value)
-                    localStorage.setItem('content', content)
-                }}
+            <Alert
+                status="success"
+                variant="subtle"
+                flexDirection="column"
             >
-                <form className={"submit-post"}>
-                    <FailedPost/>
-                    <label className={"form-input"}>
-                        <input
-                            type={"text"}
-                            className={"form-input"}
-                            onChange={event => {
-                                setTitle(event.target.value)
-                                setMadeChanges(true)
-                            }}
-                            name={"title"}
-                            placeholder="&nbsp;"
-                            defaultValue={title}
-                            required/>
-                        <span className="label">Title</span>
-                        <span className="focus-bg"/>
-                    </label>
-                    <label className={"form-input"}>
-                        <input type={"text"}
-                               className={"form-input"}
-                               onChange={event => {
-                                   setDescription(event.target.value)
-                                   setMadeChanges(true)
-                               }}
-                               placeholder="&nbsp;"
-                               name={"description"}
-                               defaultValue={description}
-                               required/>
-                        <span className="label">Description</span>
-                        <span className="focus-bg"/>
-                    </label>
-                    <select className={"form-select"}
-                            onChange={event => {
-                                setTags(event.target.value)
-                                setMadeChanges(true)
-                            }}
-                            required>
+                <AlertIcon boxSize="50px" mr={0} />
+                <AlertTitle mt={4} mb={1} fontSize="lg">
+                    Article Submitted!
+                </AlertTitle>
+                <AlertDescription maxWidth="sm">
+                    Thank you for your submission! Your article will be held until a moderator approves it. Until then check out <u><Link
+                    to={"/articles"}>some other articles!</Link></u>
+                </AlertDescription>
+            </Alert>
+        )
+    } else {
+        return (
+            <div>
+                <FormControl>
+                    <Input
+                        mb={2}
+                        type={"text"}
+                        variant="flushed"
+                        onChange={event => {
+                            setTitle(event.target.value)
+                            setMadeChanges(true)
+                        }}
+                        name={"title"}
+                        placeholder="Title"
+                        isRequired={true}
+                    />
+
+
+                    <Input mb={2}
+                           type={"text"}
+                           variant="flushed"
+                           onChange={event => {
+                               setDescription(event.target.value)
+                               setMadeChanges(true)
+                           }}
+                           placeholder="Description"
+                           name="description"
+                           isRequired={true}
+                    />
+                    <Select
+                        mb={10}
+                        onChange={event => {
+                            setTags(event.target.value)
+                            setMadeChanges(true)
+                        }}
+                        required>
                         <option value="" selected disabled>Select a Category</option>
                         <option value="Block Resource">Block Resource</option>
                         <option value="Block Farming">Block Farming</option>
@@ -178,52 +186,10 @@ const NewArticle = () => {
                         <option value="Duplicate">Duplicate</option>
                         <option value="Community">Community</option>
 
-                    </select>
-                    <Toolbar>
-                        <MarkButton format="bold" icon="format_bold"/>
-                        <MarkButton format="italic" icon="format_italic"/>
-                        <MarkButton format="underline" icon="format_underlined"/>
-                        <MarkButton format="code" icon="code"/>
-                        <BlockButton format="heading-one" icon="looks_one"/>
-                        <BlockButton format="heading-two" icon="looks_two"/>
-                        <BlockButton format="block-quote" icon="format_quote"/>
-                        <BlockButton format="numbered-list" icon="format_list_numbered"/>
-                        <BlockButton format="bulleted-list" icon="format_list_bulleted"/>
-                        <InsertImageButton/>
-                        <LinkButton/>
-                    </Toolbar>
-                    <Editable
-                        className={"editor"}
-                        renderElement={renderElement}
-                        renderLeaf={renderLeaf}
-                        placeholder="Enter some rich text…"
-                        spellCheck
-                        autoFocus
-                        onKeyDown={event => {
-                            for (const hotkey in HOTKEYS) {
-                                if (isHotkey(hotkey, event as any)) {
-                                    event.preventDefault();
-                                    const mark = HOTKEYS[hotkey];
-                                    toggleMark(editor, mark);
-                                }
-                            }
-                        }}
-
-                    />
-                    <SubmitButton/>
-                </form>
-            </Slate>
-        )
-    }
-    else {
-        return (
-            <div className="alert alert-success" role="alert">
-                <h4 className="alert-heading">Success!</h4>
-                <hr/>
-                <p>We appreciate your contribution to not only the technical minecraft wiki, but also the community as a
-                    whole. People like you
-                    make this community fun and expanding. Keep up the great work, and we hope to see you again!
-                </p>
+                    </Select>
+                </FormControl>
+                <ArticleEditor initValue={initialValue} readonly={false} placeholder={"Start writing ..."}/>
+                <SubmitButton/>
             </div>
         )
     }
@@ -232,7 +198,7 @@ const NewArticle = () => {
 const initialValue = [
     {
         children: [
-            { text: '' },
+            {text: ''},
         ],
     },
 ]

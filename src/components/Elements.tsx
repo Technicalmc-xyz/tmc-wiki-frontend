@@ -7,7 +7,7 @@ import {Node, Editor, Range, Transforms} from "slate";
 import {CopyLinkButton} from "./RichUtils";
 import {HashLink} from 'react-router-hash-link';
 import {Link} from 'react-router-dom';
-
+import {Heading} from '@chakra-ui/react';
 
 export const Element = props => {
     const {attributes, children, element} = props
@@ -28,7 +28,8 @@ export const Element = props => {
             return <ImageElement {...props} />
         case 'link':
             return (
-                <a {...attributes} href={element.url} target={"_blank"} rel="noopener noreferrer">
+                <a {...attributes} href={element.url} target={"_blank"} rel="noopener noreferrer"
+                   style={{color: "cornflowerblue", textDecoration: "underline"}}>
                     {children}
                 </a>
             )
@@ -59,16 +60,16 @@ export const Leaf = ({attributes, children, leaf}) => {
 
 const Header1Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
-    return <h2 className={"article-header"} id={anchorId}{...attributes}><HashLink
+    return <Heading mt={5} id={anchorId}{...attributes}><HashLink
         to={`#${anchorId}`}>{children}</HashLink>
         <hr/>
-    </h2>
+    </Heading>
 }
 
 const Header2Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
-    return <h4 className={"article-sub-header"} id={anchorId}{...attributes}><HashLink
-        to={`#${anchorId}`}>{children}</HashLink></h4>
+    return <Heading size={"md"} id={anchorId}{...attributes}><HashLink
+        to={`#${anchorId}`}>{children}</HashLink></Heading>
 }
 export const ImageElement = ({attributes, children, element}) => {
     const selected = useSelected()
@@ -93,6 +94,11 @@ export const ImageElement = ({attributes, children, element}) => {
             {children}
         </div>
     )
+}
+
+export const withFooterLinks = (editor, Element) => {
+    const matches = Editor.nodes(editor, {at:[], match: (node) => Element.isElement(node) && node.type === "link"})
+    console.log(matches);
 }
 
 export const withImages = editor => {
@@ -196,4 +202,5 @@ const wrapLink = (editor, url) => {
         Transforms.collapse(editor, {edge: 'end'})
     }
 }
+
 
