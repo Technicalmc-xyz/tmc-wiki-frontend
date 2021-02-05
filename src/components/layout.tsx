@@ -2,7 +2,7 @@ import React from "react"
 import Nav from "./nav";
 import Footer from "./footer";
 import PropTypes from "prop-types"
-import {Flex, Box} from "@chakra-ui/react";
+import {Box} from "@chakra-ui/react";
 
 const Layout = ({children}) => {
     return (

@@ -1,17 +1,15 @@
-import React, {useState, useMemo, useCallback, useEffect, FC, memo} from 'react'
-import {Node, createEditor} from 'slate'
+import React, {useState, useCallback, useEffect, FC, memo} from 'react'
+import {Node} from 'slate'
 import {useParams} from "react-router";
 import {
     FormControl,
     Input,
     Select,
     Spinner,
-    Flex,
     AlertIcon,
     AlertTitle,
     AlertDescription,
     Alert,
-    Box,
     Button
 } from '@chakra-ui/react'
 import ArticleEditor from "../ArticleEditor";
@@ -134,11 +132,12 @@ const EditArticle = () => {
                 setFailed(true)
             })
     }
-    const FailedPost: FC = () => {
+    const FailedPost = () => {
         if (failed) {
-            return (<div className="alert alert-danger show" role="alert">
+            return <Alert status="error">
+                <AlertIcon/>
                 {failedMessage}
-            </div>);
+            </Alert>
         } else {
             return null;
         }
@@ -188,9 +187,11 @@ const EditArticle = () => {
     } else {
         return (
             <div>
+                <FailedPost/>
                 <FormControl>
                     <Input
                         mb={2}
+                        id={"title"}
                         type={"text"}
                         variant="flushed"
                         onChange={event => {
@@ -203,6 +204,7 @@ const EditArticle = () => {
                         isRequired={true}
                     />
                     <Input mb={2}
+                           id={"description"}
                            type={"text"}
                            variant="flushed"
                            onChange={event => {
@@ -215,14 +217,15 @@ const EditArticle = () => {
                            isRequired={true}
                     />
                     <Select
+                        id={"tag"}
                         mb={10}
-                        selected={tags}
+                        defaultValue={tags}
                         onChange={event => {
                             setTags(event.target.value)
                             setMadeChanges(true)
                         }}
                         required>
-                        <option value="" selected disabled>Select a Category</option>
+                        <option value="select" disabled>Select a Category</option>
                         <option value="Block Resource">Block Resource</option>
                         <option value="Block Farming">Block Farming</option>
                         <option value="Mob Resource">Mob Resource</option>

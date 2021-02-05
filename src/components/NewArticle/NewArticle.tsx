@@ -1,23 +1,7 @@
-import React, {useState, useMemo, useCallback, useEffect} from 'react'
-import isHotkey from 'is-hotkey'
-import {Node, createEditor} from 'slate'
-import {
-    withReact
-} from 'slate-react'
-import {withHistory} from 'slate-history'
-
-import {Element, Leaf, withLinks, withImages} from "../Elements";
+import React, {useState, useEffect} from 'react'
 import ArticleEditor from "../ArticleEditor";
 import {FormControl, Input, Select, Box, Button, AlertIcon, AlertTitle, AlertDescription, Alert} from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-
-
-const HOTKEYS = {
-    'mod+b': 'bold',
-    'mod+i': 'italic',
-    'mod+u': 'underline',
-    'mod+`': 'code',
-}
 
 const NewArticle = () => {
     useEffect(() => {
@@ -35,13 +19,6 @@ const NewArticle = () => {
     const [success, setSuccess] = useState(false)
     const [authed, setAuthed] = useState(false);
     const [checkedAuth, setCheckedAuth] = useState(false);
-    const [value, setValue] = useState<Node[]>(initialValue)
-    const renderElement = useCallback(props => <Element {...props} />, [])
-    const renderLeaf = useCallback(props => <Leaf {...props} />, [])
-    const editor = useMemo(
-        () => withImages(withLinks(withHistory(withReact(createEditor())))),
-        []
-    )
 
     const checkAuth = async () => {
         const response = await fetch('/api/__userinfo__');
@@ -139,6 +116,7 @@ const NewArticle = () => {
     } else {
         return (
             <div>
+                <FailedPost/>
                 <FormControl>
                     <Input
                         mb={2}

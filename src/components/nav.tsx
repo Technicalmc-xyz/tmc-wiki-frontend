@@ -1,14 +1,11 @@
-import React, {FC, ReactNode, useEffect, useState} from "react"
+import React, {useEffect, useState} from "react"
 import book from "./Home/img/book.png";
 import {
     Box,
     Text,
-    Stack,
     Flex,
     Button,
-    Heading,
     Image,
-    ColorModeScript,
     useColorMode,
     useDisclosure,
     DrawerOverlay,
@@ -19,8 +16,6 @@ import {
     Input,
     DrawerFooter,
     Drawer,
-    Center,
-    Tooltip
 } from "@chakra-ui/react"
 import {Link, useLocation} from "react-router-dom";
 

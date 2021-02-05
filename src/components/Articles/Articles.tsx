@@ -1,8 +1,8 @@
 //TODO add pagnation
-import React, {FC, memo, useEffect, useMemo, useState} from "react"
+import React, {memo, useCallback, useEffect, useMemo, useState} from "react"
 import {Link} from "react-router-dom"
 import {Box, Heading, Button, Select, Flex, Spinner, Text, AlertIcon, Alert} from "@chakra-ui/react"
-import {motion, useTransform, useMotionValue, AnimateSharedLayout} from "framer-motion"
+import {motion} from "framer-motion"
 
 const Articles = () => {
     const MotionBox = motion.custom(Box);
@@ -41,7 +41,7 @@ const Articles = () => {
         console.log(data)
     };
 
-    const sort = (a, b): number => {
+    const sort = useCallback((a, b) => {
         if (sortType === 'newest') {
             return b.last_edited - a.last_edited;
         } else if (sortType === 'oldest') {
@@ -51,7 +51,7 @@ const Articles = () => {
         } else if (sortType === 'alphabetic-reverse') {
             return b.title.localeCompare(a.title)
         }
-    }
+    },[sortType]);
 
     const articleCard = useMemo(() => {
             return metadata
@@ -94,7 +94,7 @@ const Articles = () => {
                 )
         }
         ,
-        [metadata, tagFilter, sortType, compact]);
+        [metadata, tagFilter, compact, sort]);
     const sortAndFilter = () => {
         return (
             <Flex

@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useMemo, useState} from "react"
+import React, {memo, useCallback, useEffect, useMemo, useState} from "react"
 import {
     Tbody,
     Tr,
@@ -9,9 +9,7 @@ import {
     Select,
     AlertIcon,
     Alert,
-    Flex,
     Box,
-    toast,
     useToast,
     Image
 } from "@chakra-ui/react"
@@ -48,15 +46,15 @@ const Permissions = () => {
         console.log(data)
         await setUserData(data);
     };
-    const sort = (a, b): number => {
+    const sort = useCallback((a, b): number => {
         if (sortType === 'username') {
             return a.Username.localeCompare(b.Username)
         }
         else if (sortType === 'username-reverse') {
             return b.Username.localeCompare(a.Username)
         }
-    }
-    const handleModify = async (DiscordID, Rank) => {
+    },[sortType])
+    const handleModify = useCallback((DiscordID, Rank) => {
         fetch("/api/__modifyuserperms__", {
             // Adding method type
             method: "POST",
@@ -84,7 +82,7 @@ const Permissions = () => {
                 duration: 5000,
                 isClosable: true,
             }))
-    };
+    },[toast]);
     const userTable = useMemo(() => userData
             .sort((a,b) => sort(a,b))
             .filter(user => user.rank === filterRank || filterRank === 'all')
@@ -115,7 +113,7 @@ const Permissions = () => {
                     </Tr>
                 )
             ),
-        [userData, filterRank, sortType]);
+        [userData, filterRank, handleModify, sort]);
 
     const filterRole = () => {
         return (

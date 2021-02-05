@@ -1,7 +1,7 @@
 import React, {useEffect, useState, memo} from "react"
-import {FiUser, RiAdminFill, GrUserAdmin} from "react-icons/all";
+import {RiAdminFill} from "react-icons/all";
 import {FiLogIn, FiLogOut} from "react-icons/fi";
-import {Flex, Image, Heading, Box, HStack, Text, Avatar, Badge, Stack} from "@chakra-ui/react";
+import {Box, HStack, Text, Avatar, Badge, Stack} from "@chakra-ui/react";
 
 const Profile = () => {
     const [authenticated, setAuthenticated] = useState(false);

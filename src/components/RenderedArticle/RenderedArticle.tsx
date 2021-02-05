@@ -1,9 +1,8 @@
-import React, {useState, useMemo, useCallback, useEffect, FC} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import {Node} from 'slate'
 import {useParams} from "react-router";
-import {Element, Leaf, withLinks, withImages} from "../Elements";
 import ArticleEditor from "../ArticleEditor";
-import {Button, Heading, Alert, AlertIcon, AlertTitle, AlertDescription, Box, SkeletonText, Text, Spacer} from '@chakra-ui/react';
+import {Button, Heading, Alert, AlertIcon, AlertTitle, AlertDescription, Box, SkeletonText, Text} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 const RenderedArticle = () => {

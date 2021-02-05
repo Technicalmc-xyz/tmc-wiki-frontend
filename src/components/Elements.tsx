@@ -4,9 +4,7 @@ import {css} from "emotion";
 import isUrl from "is-url";
 import imageExtensions from 'image-extensions'
 import {Node, Editor, Range, Transforms} from "slate";
-import {CopyLinkButton} from "./RichUtils";
 import {HashLink} from 'react-router-hash-link';
-import {Link} from 'react-router-dom';
 import {Heading} from '@chakra-ui/react';
 
 export const Element = props => {

@@ -2,7 +2,7 @@ import {Editable, Slate, withReact} from "slate-react";
 import {BlockButton, InsertImageButton, LinkButton, MarkButton, toggleMark, Toolbar} from "./RichUtils";
 import isHotkey from "is-hotkey";
 import React, {useCallback, useMemo, useState} from "react";
-import {Element, Leaf, withImages, withLinks, withFooterLinks} from "./Elements";
+import {Element, Leaf, withImages, withLinks} from "./Elements";
 import {withHistory} from "slate-history";
 import {createEditor, Node} from "slate";
 import { Box } from "@chakra-ui/react";
@@ -21,7 +21,6 @@ interface Props {
 }
 
 const ArticleEditor = (props: Props) => {
-    const [madeChanges, setMadeChanges] = useState(false)
     const [value, setValue] = useState<Node[]>(props.initValue)
     const renderElement = useCallback(props => <Element {...props} />, [])
     const renderLeaf = useCallback(props => <Leaf {...props} />, [])
@@ -36,7 +35,6 @@ const ArticleEditor = (props: Props) => {
             value={value}
             onChange={value => {
                 setValue(value)
-                setMadeChanges(true)
                 const content = JSON.stringify(value)
                 localStorage.setItem('content', content)
             }}
