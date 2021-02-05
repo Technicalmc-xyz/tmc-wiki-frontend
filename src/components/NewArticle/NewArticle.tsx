@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import ArticleEditor from "../ArticleEditor";
 import {FormControl, Input, Select, Box, Button, AlertIcon, AlertTitle, AlertDescription, Alert} from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 const NewArticle = () => {
     useEffect(() => {
@@ -29,7 +29,7 @@ const NewArticle = () => {
     if (checkedAuth && !authed) {
         return <Box>
             <Alert status="error">
-                <AlertIcon />
+                <AlertIcon/>
                 You must be logged in before creating an article
             </Alert>
             <a href={"/api/auth"}><Button mt={4}>Login</Button></a>
@@ -103,12 +103,13 @@ const NewArticle = () => {
                 variant="subtle"
                 flexDirection="column"
             >
-                <AlertIcon boxSize="50px" mr={0} />
+                <AlertIcon boxSize="50px" mr={0}/>
                 <AlertTitle mt={4} mb={1} fontSize="lg">
                     Article Submitted!
                 </AlertTitle>
                 <AlertDescription maxWidth="sm">
-                    Thank you for your submission! Your article will be held until a moderator approves it. Until then check out <u><Link
+                    Thank you for your submission! Your article will be held until a moderator approves it. Until then
+                    check out <u><Link
                     to={"/articles"}>some other articles!</Link></u>
                 </AlertDescription>
             </Alert>
@@ -119,6 +120,7 @@ const NewArticle = () => {
                 <FailedPost/>
                 <FormControl>
                     <Input
+                        id={"title"}
                         mb={2}
                         type={"text"}
                         variant="flushed"
@@ -132,25 +134,29 @@ const NewArticle = () => {
                     />
 
 
-                    <Input mb={2}
-                           type={"text"}
-                           variant="flushed"
-                           onChange={event => {
-                               setDescription(event.target.value)
-                               setMadeChanges(true)
-                           }}
-                           placeholder="Description"
-                           name="description"
-                           isRequired={true}
+                    <Input
+                        id={"description"}
+                        mb={2}
+                        type={"text"}
+                        variant="flushed"
+                        onChange={event => {
+                            setDescription(event.target.value)
+                            setMadeChanges(true)
+                        }}
+                        placeholder="Description"
+                        name="description"
+                        isRequired={true}
                     />
                     <Select
+                        id={"tag"}
                         mb={10}
+                        defaultValue={"disabled"}
                         onChange={event => {
                             setTags(event.target.value)
                             setMadeChanges(true)
                         }}
                         required>
-                        <option value="" selected disabled>Select a Category</option>
+                        <option value="disabled" disabled>Select a Category</option>
                         <option value="Block Resource">Block Resource</option>
                         <option value="Block Farming">Block Farming</option>
                         <option value="Mob Resource">Mob Resource</option>

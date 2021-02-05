@@ -28,7 +28,6 @@ const Archive = () => {
     const getPost = async () => {
         const response = await fetch('/api/archive?')
         const data = await response.json()
-        console.log(data)
         await setMetadata(data);
     };
     const checkAuth = async () => {
@@ -38,7 +37,7 @@ const Archive = () => {
     };
     const postLink = useMemo(() => Object.entries(metadata).map
         (([id, {name, size, created, link}]) => (
-                <Tr>
+                <Tr key={id}>
                     <Td>{name}</Td>
                     <Td>{created}</Td>
                     <Td>{size} kb</Td>

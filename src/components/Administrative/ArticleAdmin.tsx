@@ -119,7 +119,6 @@ const ArticleAdmin = () => {
             .then(async (response) => {
                 setFetchState("success")
                 const data = await response.json()
-                console.log(data)
                 setArticleMetadata(await data);
             })
             //If the fetch was bad set the state of the fecth to failed
@@ -131,7 +130,6 @@ const ArticleAdmin = () => {
 
 
     const StatusBadge = (status) => {
-        console.log(status)
         if (status.status)
             return <Badge colorScheme="purple">New</Badge>
         else
@@ -171,7 +169,7 @@ const ArticleAdmin = () => {
 }
 const articleTable = useMemo(() => articleMetadata
         .map(({id, last_edited, tag, title, description, publicized, status}) => (
-                <Tr>
+                <Tr key={id}>
                     <Td isNumeric><StatusBadge status={status}/> {id}</Td>
                     <Td>{title}</Td>
                     <Td>{description}</Td>

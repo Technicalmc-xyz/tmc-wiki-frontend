@@ -38,7 +38,6 @@ const Articles = () => {
         const response = await fetch('/api/__listposts__?n=100000') // TODO: implement pages
         const data = await response.json()
         await setMetadata(data);
-        console.log(data)
     };
 
     const sort = useCallback((a, b) => {
@@ -58,7 +57,7 @@ const Articles = () => {
                 .sort((a, b) => sort(a, b))
                 .filter(filter => filter.tags === tagFilter || tagFilter === 'all')
                 .map(({title, id, tags, last_edited, description}: Article) => (
-                        <MotionBox>
+                        <MotionBox key={id}>
                             {compact
                                 ?
                                     <MotionBox
@@ -102,11 +101,12 @@ const Articles = () => {
             >
                 <Select
                     width={"45%"}
+                    defaultValue={"all"}
                     mr={3}
                     onChange={event => {
                         setTagFilter(event.target.value)
                     }}>
-                    <option value="all" selected>All</option>
+                    <option value="all">All</option>
                     <option value="Block Resource">Block Resource</option>
                     <option value="Block Farming">Block Farming</option>
                     <option value="Mob Resource">Mob Resource</option>
@@ -125,11 +125,12 @@ const Articles = () => {
                 </Select>
                 <Select
                     mr={3}
+                    defaultValue={"newest"}
                     width={"45%"}
                     onChange={event => {
                         setSortType(event.target.value)
                     }}>
-                    <option value="newest" selected>Newest</option>
+                    <option value="newest">Newest</option>
                     <option value="oldest">Oldest</option>
                     <option value="alphabetic">A-Z</option>
                     <option value="alphabetic-reverse">Z-A</option>

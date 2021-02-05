@@ -43,9 +43,9 @@ const Permissions = () => {
     const getUsers = async () => {
         const response = await fetch('/api/__getalluserperms__')
         const data = await response.json()
-        console.log(data)
         await setUserData(data);
     };
+
     const sort = useCallback((a, b): number => {
         if (sortType === 'username') {
             return a.Username.localeCompare(b.Username)
@@ -53,7 +53,8 @@ const Permissions = () => {
         else if (sortType === 'username-reverse') {
             return b.Username.localeCompare(a.Username)
         }
-    },[sortType])
+    },[sortType]);
+
     const handleModify = useCallback((DiscordID, Rank) => {
         fetch("/api/__modifyuserperms__", {
             // Adding method type
@@ -83,11 +84,12 @@ const Permissions = () => {
                 isClosable: true,
             }))
     },[toast]);
+
     const userTable = useMemo(() => userData
             .sort((a,b) => sort(a,b))
             .filter(user => user.rank === filterRank || filterRank === 'all')
             .map(({id, username, rank, avatar}: User) => (
-                    <Tr>
+                    <Tr key={id}>
                         <Td>
                             <Image
                             borderRadius={"full"}
@@ -131,10 +133,11 @@ const Permissions = () => {
                 </Select>
                 <Select
                     mv={2}
+                    defaultValue={"username"}
                         onChange={event => {
                             setSortType(event.target.value)
                         }}>
-                    <option value="username" selected>Username A-Z</option>
+                    <option value="username">Username A-Z</option>
                     <option value="username-reverse">Username Z-A</option>
                 </Select>
             </div>
