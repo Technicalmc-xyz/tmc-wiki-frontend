@@ -267,6 +267,7 @@ export const MarkButton = ({format, icon}) => {
         </Button>
     )
 }
+
 export const LinkButton = () => {
     const editor = useSlate()
     return (

@@ -8,7 +8,6 @@ import NewArticle from "./components/NewArticle/NewArticle";
 import Archive from "./components/Archive/Archive";
 import About from "./components/About/About";
 import License from './components/License/License';
-import Permissions from "./components/Administrative/Permissions";
 import NotFound from "./components/NotFound";
 import Profile from "./components/User/Profile";
 import Layout from "./components/layout";
@@ -38,7 +37,6 @@ const App = (): JSX.Element => {
 
                     {/*Users*/}
                     <Route path='/profile' component={Profile}/>
-                    <Route path='/perms' component={Permissions}/>
 
                     {/*articles*/}
                     <Route path='/articles' component={Posts}/>

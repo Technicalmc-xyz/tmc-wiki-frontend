@@ -172,7 +172,6 @@ const articleTable = useMemo(() => articleMetadata
                 <Tr key={id}>
                     <Td isNumeric><StatusBadge status={status}/> {id}</Td>
                     <Td>{title}</Td>
-                    <Td>{description}</Td>
                     <Td>{tag}</Td>
                     <Td>{new Date(last_edited).toLocaleString()}</Td>
                     <Td>
@@ -267,7 +266,6 @@ else if (fetchState === "failed") {
                 <Tr>
                     <Th>#</Th>
                     <Th>Title</Th>
-                    <Th>Description</Th>
                     <Th>Tag</Th>
                     <Th>Last Edited</Th>
                     <Th>Delete</Th>

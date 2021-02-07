@@ -7,15 +7,15 @@ import { TabList, Tab, Tabs, TabPanels, TabPanel } from "@chakra-ui/react";
 const Admin = () =>
     <Tabs>
         <TabList>
-            <Tab>Permissons</Tab>
             <Tab>Articles</Tab>
+            <Tab>Permissons</Tab>
         </TabList>
         <TabPanels>
             <TabPanel>
-                <Permissions/>
+                <ArticleAdmin/>
             </TabPanel>
             <TabPanel>
-                <ArticleAdmin/>
+                <Permissions/>
             </TabPanel>
         </TabPanels>
     </Tabs>

@@ -2,7 +2,7 @@ import {Editable, Slate, withReact} from "slate-react";
 import {BlockButton, InsertImageButton, LinkButton, MarkButton, toggleMark, Toolbar} from "./RichUtils";
 import isHotkey from "is-hotkey";
 import React, {useCallback, useMemo, useState} from "react";
-import {Element, Leaf, withImages, withLinks} from "./Elements";
+import {Element, Leaf, withImages, withLinks, withShortcuts} from "./Elements";
 import {withHistory} from "slate-history";
 import {createEditor, Node} from "slate";
 import { Box } from "@chakra-ui/react";
@@ -25,7 +25,7 @@ const ArticleEditor = (props: Props) => {
     const renderElement = useCallback(props => <Element {...props} />, [])
     const renderLeaf = useCallback(props => <Leaf {...props} />, [])
     const editor = useMemo(
-        () => withImages(withLinks(withHistory(withReact(createEditor())))),
+        () => withShortcuts(withImages(withLinks(withHistory(withReact(createEditor()))))),
         []
     )
     return (
@@ -50,7 +50,6 @@ const ArticleEditor = (props: Props) => {
                     <BlockButton format="block-quote" icon="format_quote"/>
                     <BlockButton format="numbered-list" icon="format_list_numbered"/>
                     <BlockButton format="bulleted-list" icon="format_list_bulleted"/>
-                    <BlockButton format="footnote" icon="format_list_bulleted"/>
                     <InsertImageButton/>
                     <LinkButton/>
                 </Toolbar>
