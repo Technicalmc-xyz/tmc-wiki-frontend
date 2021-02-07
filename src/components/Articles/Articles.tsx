@@ -66,9 +66,9 @@ const Articles = () => {
                                         p={"5"}
                                         mb={"3"}
                                     >
-                                        <Heading><Link className={"link"} to={`/render-article/${id}`}>{title}</Link>
+                                        <Heading size={"md"}><Link className={"link"} to={`/render-article/${id}`}>{title}</Link>
                                         </Heading>
-                                        <Text as={"sup"}>{description}</Text>
+                                        <Text>{description}</Text>
 
                                     </MotionBox>
                                 : <MotionBox
@@ -84,7 +84,7 @@ const Articles = () => {
                                         <Text>{description}</Text>
                                         <Text>{tags}</Text>
                                         <Text>{new Date(last_edited).toLocaleString()}</Text>
-                                        <Button mt={2}><Link to={"/edit-article/" + id}>Edit</Link></Button>
+                                        <Link to={"/edit-article/" + id}><Button mt={2} variant={"outline"}>Edit</Button></Link>
                                     </div>
                                 </MotionBox>
                             }
@@ -135,7 +135,7 @@ const Articles = () => {
                     <option value="alphabetic">A-Z</option>
                     <option value="alphabetic-reverse">Z-A</option>
                 </Select>
-                <Button onClick={() => setCompact(!compact)}>Compact</Button>
+                <Button onClick={() => setCompact(!compact)} variant={"outline"}>Compact</Button>
             </Flex>
         );
     }

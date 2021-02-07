@@ -16,7 +16,6 @@ import Admin from "./components/Administrative/Admin";
 
 const App = (): JSX.Element => {
     useLayoutEffect(() => {
-        //TODO: setTimeout with 0 made it work in Safari - i dont know why
         setTimeout(() => {
             const { hash } = window.location
             if (!hash) return

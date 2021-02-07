@@ -1,29 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {useFocused, useSelected} from "slate-react";
 import {css} from "emotion";
 import isUrl from "is-url";
 import imageExtensions from 'image-extensions'
 import {Node, Editor, Range, Transforms} from "slate";
 import {HashLink} from 'react-router-hash-link';
-import {Heading, Code} from '@chakra-ui/react';
+import {Heading, Code, useClipboard, UnorderedList, OrderedList, ListItem} from '@chakra-ui/react';
+import { GoLink } from 'react-icons/go';
 
 export const Element = props => {
     const {attributes, children, element} = props
     switch (element.type) {
         case 'block-quote':
             return <blockquote {...attributes}>{children}</blockquote>
-        case 'bulleted-list':
-            return <ul {...attributes}>{children}</ul>
         case 'heading-one':
             return <Header1Element {...props}/>
         case 'heading-two':
             return <Header2Element {...props}/>
         case 'block-code':
             return <CodeNode {...props}/>
-        case 'list-item':
-            return <li {...attributes}>{children}</li>
+        case 'bulleted-list':
+            return <UnorderedList {...attributes} ml={10}>{children}</UnorderedList>
         case 'numbered-list':
-            return <ol {...attributes}>{children}</ol>
+            return <OrderedList {...attributes} ml={10}>{children}</OrderedList>
+        case 'list-item':
+            return <ListItem {...attributes}>{children}</ListItem>
         case 'image':
             return <ImageElement {...props} />
         case 'link':
@@ -64,18 +65,39 @@ const CodeNode = props => (
         children={props.children}
     />
 );
+const CopyLinkButton = (props) => {
+    const [value] = useState(props.link)
+    const { onCopy } = useClipboard(value)
+    return (
+        <>
+                <button onClick={onCopy} style={{marginRight: "0.25rem"}}>
+                    <GoLink size={props.size}/>
+                </button>
+        </>
+    )
+};
+
 const Header1Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
-    return <Heading mt={5} id={anchorId}{...attributes}><HashLink
-        to={`#${anchorId}`}>{children}</HashLink>
-        <hr/>
-    </Heading>
+    return (
+        <Heading mt={5} id={anchorId}{...attributes}>
+            <HashLink to={`#${anchorId}`}>{children}</HashLink>
+            <CopyLinkButton link={`${window.location.href.replace(window.location.hash,"")}#${anchorId}`} size={"25"}/>
+            <hr/>
+        </Heading>
+    )
 }
 
 const Header2Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
-    return <Heading size={"md"} id={anchorId}{...attributes}><HashLink
-        to={`#${anchorId}`}>{children}</HashLink></Heading>
+    return (
+        <Heading size={"md"} id={anchorId}{...attributes}>
+            <HashLink
+                to={`#${anchorId}`}>{children}
+            </HashLink> <CopyLinkButton link={`${window.location.href.replace(window.location.hash,"")}#${anchorId}`} size={"15"}/>
+            <hr/>
+        </Heading>
+    )
 }
 export const ImageElement = ({attributes, children, element}) => {
     const selected = useSelected()
