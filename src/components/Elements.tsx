@@ -5,7 +5,7 @@ import isUrl from "is-url";
 import imageExtensions from 'image-extensions'
 import {Node, Editor, Range, Transforms} from "slate";
 import {HashLink} from 'react-router-hash-link';
-import {Heading} from '@chakra-ui/react';
+import {Heading, Code} from '@chakra-ui/react';
 
 export const Element = props => {
     const {attributes, children, element} = props
@@ -18,6 +18,8 @@ export const Element = props => {
             return <Header1Element {...props}/>
         case 'heading-two':
             return <Header2Element {...props}/>
+        case 'block-code':
+            return <CodeNode {...props}/>
         case 'list-item':
             return <li {...attributes}>{children}</li>
         case 'numbered-list':
@@ -41,7 +43,7 @@ export const Leaf = ({attributes, children, leaf}) => {
     }
 
     if (leaf.code) {
-        children = <code>{children}</code>
+        children = <Code>{children}</Code>
     }
 
     if (leaf.italic) {
@@ -55,7 +57,13 @@ export const Leaf = ({attributes, children, leaf}) => {
     return <span {...attributes}>{children}</span>
 }
 
-
+const CodeNode = props => (
+    <Code
+        display={"block"}
+        whiteSpace={"pre"}
+        children={props.children}
+    />
+);
 const Header1Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
     return <Heading mt={5} id={anchorId}{...attributes}><HashLink
@@ -95,7 +103,7 @@ export const ImageElement = ({attributes, children, element}) => {
 }
 
 export const withFooterLinks = (editor, Element) => {
-    const matches = Editor.nodes(editor, {at:[], match: (node) => Element.isElement(node) && node.type === "link"})
+    const matches = Editor.nodes(editor, {at: [], match: (node) => Element.isElement(node) && node.type === "link"})
     console.log(matches);
 }
 

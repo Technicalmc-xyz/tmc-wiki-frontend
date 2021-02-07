@@ -44,7 +44,7 @@ const ArticleEditor = (props: Props) => {
                     <MarkButton format="bold" icon="format_bold"/>
                     <MarkButton format="italic" icon="format_italic"/>
                     <MarkButton format="underline" icon="format_underlined"/>
-                    <MarkButton format="code" icon="code"/>
+                    <BlockButton format="block-code" icon="code"/>
                     <BlockButton format="heading-one" icon="looks_one"/>
                     <BlockButton format="heading-two" icon="looks_two"/>
                     <BlockButton format="block-quote" icon="format_quote"/>
