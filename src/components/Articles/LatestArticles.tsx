@@ -1,12 +1,14 @@
 //TODO add pagnation
 import React, {memo, useEffect, useMemo, useState} from "react"
+import {Box, Heading, Badge, Stack} from "@chakra-ui/react";
+import {Link} from "react-router-dom";
 
 const LatestArticles = () => {
     const [metadata, setMetadata] = useState([])
     // default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
     useEffect(() => {
-        getPost()
+        getFeaturedMetadata()
             //If the fetch got the data make the state a success
             .then(() => {
                 setFetchState("success")
@@ -16,20 +18,37 @@ const LatestArticles = () => {
                 setFetchState("failed")
             })
     }, []);
-    const getPost = async () => {
-        const response = await fetch('/api/__listposts__?n=3')
-        await setMetadata(await response.json());
+
+    const getFeaturedMetadata = async () => {
+        const response = await fetch('/api/__featured__') // TODO: implement pages
+        const data = await response.json()
+        await setMetadata(data);
     };
+
+
     const postLink = useMemo(() => metadata.map(
-        ({title, id, tags, last_edited, description}) => (
-            <div className={"post-link-jumbo slideInDown"}>
-                <div className={"post-link-title"}><a href={"/render-post/" + id}><h4 className={"link"}>{title}</h4>
-                </a></div>
+        ({title, id, last_edited}) => (
+            <Box
+                key={id}
+                p={5}
+                shadow="md"
+                borderWidth="1px"
+                flex="1"
+                borderRadius="md"
+                height="50"
+
+            >
+                <Link to={"/render-article/" + id}>
+                    <Badge colorScheme="purple" fontSize={"md"}>Featured</Badge>
+                    <Heading size={"md"}>
+                        {title}
+                    </Heading>
+                </Link>
                 <div>Last updated: {new Date(last_edited).toLocaleString()}</div>
-            </div>
+            </Box>
         )
-        ),
-        [metadata]);
+    ), [metadata]);
+
     if (fetchState === "loading") {
         return (
             <div className="d-flex justify-content-center">
@@ -46,13 +65,9 @@ const LatestArticles = () => {
                 Check with Jakku on the Discord.</div>
         )
     } else return (
-        <div className={"latest-posts"}>
-            <h1 className="">Latest Posts</h1>
-
-            <div className={"post-link-jumbo-container"}>
-                {postLink}
-            </div>
-        </div>
+        <Stack mt={10}>
+            {postLink}
+        </Stack>
     );
 }
 export default memo(LatestArticles)

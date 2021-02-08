@@ -7,12 +7,12 @@ import { Link } from 'react-router-dom';
 
 const RenderedArticle = () => {
     const {id} = useParams();
-    const [status, setStatus] = useState("")
+    const [publicized, setPublicized] = useState("")
     const getPost: () => Promise<void> = useCallback(async () => {
         const response = await fetch('/api/__getpost__?id=' + id)
         const data = await response.json()
         console.log(data)
-        setStatus(data.status)
+        setPublicized(data.publicized)
         setTitle(data.title)
         setLastEdited(data.last_edited)
         setValue(JSON.parse(data.body))
@@ -54,12 +54,36 @@ const RenderedArticle = () => {
         )
     }
     //if we caught a error send a failed message
-    else if (fetchState === "failed") {
+    if (fetchState === "failed") {
         return (
-            <div className="alert alert-danger" role="alert">Sorry Looks like something is going wrong. Are you sure
-                this post exists? Is the API down? Check with Jakku on the Discord.</div>
+            <Alert
+                status="error"
+                variant="subtle"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                textAlign="center"
+                height="200px"
+            >
+                <AlertIcon boxSize="40px" mr={0}/>
+                <AlertTitle mt={4} mb={1} fontSize="lg">
+                    Article does not exist.
+                </AlertTitle>
+                <AlertDescription maxWidth="sm">
+                    <u><Link to={"/articles"}>Go check out some other posts</Link></u>
+                </AlertDescription>
+            </Alert>)
+    }
+    if (publicized) {
+        return (
+            <div>
+                <Heading>{title}</Heading>
+                <Text fontSize={"sm"}>Last Edited: {new Date(lastEdited).toLocaleString()}</Text>
+                <ArticleEditor initValue={value} readonly={true}/>
+                <EditButton/>
+            </div>
         )
-    } else if (status === "PRIVATE") {
+    } else {
         return (
             <Alert
                 status="error"
@@ -80,15 +104,6 @@ const RenderedArticle = () => {
                 </AlertDescription>
             </Alert>)
     }
-
-    else return (
-        <div>
-            <Heading>{title}</Heading>
-            <Text fontSize={"sm"}>Last Edited: {new Date(lastEdited).toLocaleString()}</Text>
-            <ArticleEditor initValue={value} readonly={true}/>
-            <EditButton />
-        </div>
-    )
 
 }
 

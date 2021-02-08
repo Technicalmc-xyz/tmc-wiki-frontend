@@ -15,7 +15,6 @@ const Articles = () => {
         description: string;
         status: Status;
     }
-
     const [metadata, setMetadata] = useState([])
     //default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")

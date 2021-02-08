@@ -15,7 +15,7 @@ const SHORTCUTS = {
     '#': 'heading-one',
     '##': 'heading-two',
     '```': 'block-code',
-    '`': 'code',
+    '`': 'leaf.code',
 }
 export const Element = props => {
     const {attributes, children, element} = props
