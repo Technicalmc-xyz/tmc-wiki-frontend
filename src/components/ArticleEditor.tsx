@@ -2,7 +2,7 @@ import {Editable, Slate, withReact} from "slate-react";
 import {BlockButton, InsertImageButton, LinkButton, MarkButton, toggleMark, Toolbar} from "./RichUtils";
 import isHotkey from "is-hotkey";
 import React, {useCallback, useMemo, useState} from "react";
-import {Element, Leaf, withImages, withLinks, withShortcuts} from "./Elements";
+import {Element, Leaf, withImages, withLinks, withShortcuts, HoveringToolbar} from "./Elements";
 import {withHistory} from "slate-history";
 import {createEditor, Node} from "slate";
 import { Box } from "@chakra-ui/react";
@@ -55,7 +55,7 @@ const ArticleEditor = (props: Props) => {
                 </Toolbar>
                 : <div/>
             }
-
+            <HoveringToolbar />
             <Editable
                 renderElement={renderElement}
                 renderLeaf={renderLeaf}

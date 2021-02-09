@@ -3,7 +3,7 @@ import React, {memo, useEffect, useMemo, useState} from "react"
 import {Box, Heading, Badge, Stack} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
 
-const LatestArticles = () => {
+const FeaturedArticles = () => {
     const [metadata, setMetadata] = useState([])
     // default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
@@ -70,4 +70,4 @@ const LatestArticles = () => {
         </Stack>
     );
 }
-export default memo(LatestArticles)
+export default memo(FeaturedArticles);

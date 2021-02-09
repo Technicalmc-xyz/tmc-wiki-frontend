@@ -1,12 +1,27 @@
 import React, {useEffect, useState, memo} from "react"
 import {RiAdminFill} from "react-icons/all";
 import {FiLogIn, FiLogOut} from "react-icons/fi";
-import {Box, HStack, Text, Avatar, Badge, Stack} from "@chakra-ui/react";
+import {
+    Box,
+    HStack,
+    Text,
+    Avatar,
+    Badge,
+    Stack,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription
+} from "@chakra-ui/react";
+import {useLocation} from "react-router-dom";
 
 const Profile = () => {
     const [authenticated, setAuthenticated] = useState(false);
     useEffect(() => {
-        getUser().catch(e => console.log(e))
+        getUser()
+            .catch(() => {
+                setAuthenticated(false);
+            });
     }, [authenticated]);
     const [avatarUrl, setAvatarUrl] = useState('');
     const [userName, setUserName] = useState('')
@@ -27,6 +42,7 @@ const Profile = () => {
             setRank(data.rank);
         }
     }
+    const location = useLocation();
 
     interface AdminButtonProps {
         rank: string
@@ -39,8 +55,7 @@ const Profile = () => {
                     <HStack>
                         <a href={"/admin"}><RiAdminFill size={"40"}/></a>
                         <hr/>
-                        <a
-                            href={"/api/auth/logout"}><FiLogOut size={"40"}/></a>
+                        <a href={"/api/auth/logout"}><FiLogOut size={"40"}/></a>
                     </HStack>
                 </Box>)
         } else
@@ -51,7 +66,6 @@ const Profile = () => {
     if (authenticated) {
         return (
             <Stack>
-                {/*<Flex> */}
                     <Avatar borderRadius={"full"}
                                border={"1px"}
                                boxShadow={"xl"}
@@ -73,8 +87,26 @@ const Profile = () => {
             </Stack>
 
         )
-    } else return (
-        <div/>
-    )
+    } else {
+        return (
+            <Alert
+                status="error"
+                variant="subtle"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                textAlign="center"
+                height="200px"
+            >
+                <AlertIcon boxSize="40px" mr={0}/>
+                <AlertTitle mt={4} mb={1} fontSize="lg">
+                    You are not logged in!
+                </AlertTitle>
+                <AlertDescription maxWidth="sm">
+                    <u><a href={"/api/auth?redirect=" + encodeURIComponent(location.pathname)}>Please login to view your profile</a></u>
+                </AlertDescription>
+            </Alert>
+        )
+    }
 }
 export default memo(Profile)

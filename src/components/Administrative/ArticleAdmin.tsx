@@ -173,7 +173,7 @@ const ArticleAdmin = () => {
                         title: `Privatized "${props.title}"`,
                         description: "This article is no longer available to the public",
                         position: "top",
-                        status: "success",
+                        status: "info",
                         duration: 5000,
                         isClosable: true,
                     })
@@ -188,7 +188,7 @@ const ArticleAdmin = () => {
                         title: `Publicized "${props.title}"`,
                         description: "This article is now available to the public",
                         position: "top",
-                        status: "success",
+                        status: "info",
                         duration: 5000,
                         isClosable: true,
                     })
@@ -206,7 +206,7 @@ const ArticleAdmin = () => {
                         title: `Unfeatured "${props.title}"`,
                         description: "This article is no longer featured",
                         position: "top",
-                        status: "success",
+                        status: "info",
                         duration: 5000,
                         isClosable: true,
                     })
@@ -221,7 +221,7 @@ const ArticleAdmin = () => {
                         title: `Featured "${props.title}"`,
                         description: "This article is now featured",
                         position: "top",
-                        status: "success",
+                        status: "info",
                         duration: 5000,
                         isClosable: true,
                     })
@@ -246,6 +246,15 @@ const ArticleAdmin = () => {
                                 setIsOpen(true);
                                 setRemoveTitle(title);
                                 setRemoveId(id);
+                                toast({
+                                    title: `Removed "${removeTitle}`,
+                                    description: "This article no longer exists",
+                                    position: "top",
+                                    status: "success",
+                                    duration: 5000,
+                                    isClosable: true,
+                                })
+                                setUpdate(update + 1)
                             }
                             }><FiTrash color={"white"}/></Button>
                         </Td>
@@ -254,7 +263,7 @@ const ArticleAdmin = () => {
                     </Tr>
                 )
             ),
-        [articleMetadata]);
+        [articleMetadata, removeTitle, toast, update]);
     if (fetchState === "loading") {
         return (
             <div className="d-flex justify-content-center">

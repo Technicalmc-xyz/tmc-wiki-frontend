@@ -6,7 +6,7 @@ import {Box, Flex, Image, HStack, Heading, Text} from "@chakra-ui/react";
 import {FaDiscord} from "react-icons/fa";
 import {motion} from "framer-motion"
 import {AiFillGithub, AiFillRedditCircle} from "react-icons/ai";
-import LatestArticles from "../Articles/LatestArticles";
+import LatestArticles from "../Articles/FeaturedArticles";
 
 
 const Home = () => {

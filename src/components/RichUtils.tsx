@@ -112,7 +112,7 @@ export const Icon = React.forwardRef(
                 'material-icons',
                 className,
                 css`
-                  font-size: 34px;
+                  font-size: 2rem;
                   vertical-align: text-bottom;
                 `
             )}

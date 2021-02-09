@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import {useFocused, useSelected} from "slate-react";
+import React, {useEffect, useState, useRef} from 'react';
+import {useFocused, useSelected, useSlate, ReactEditor} from "slate-react";
 import {css} from "emotion";
 import isUrl from "is-url";
 import imageExtensions from 'image-extensions'
-import {Node, Editor, Range, Transforms, Element as SlateElement,Point} from "slate";
+import {Node, Editor, Range, Transforms, Element as SlateElement, Point, Text} from "slate";
 import {HashLink} from 'react-router-hash-link';
 import {Heading, Code, useClipboard, UnorderedList, OrderedList, ListItem} from '@chakra-ui/react';
-import { GoLink } from 'react-icons/go';
+import {GoLink} from 'react-icons/go';
+import {Icon, Menu, Portal, Button} from './RichUtils';
+
 const SHORTCUTS = {
     '*': 'list-item',
     '-': 'list-item',
@@ -15,7 +17,6 @@ const SHORTCUTS = {
     '#': 'heading-one',
     '##': 'heading-two',
     '```': 'block-code',
-    '`': 'leaf.code',
 }
 export const Element = props => {
     const {attributes, children, element} = props
@@ -76,12 +77,12 @@ const CodeNode = props => (
 );
 const CopyLinkButton = (props) => {
     const [value] = useState(props.link)
-    const { onCopy } = useClipboard(value)
+    const {onCopy} = useClipboard(value)
     return (
         <>
-                <button onClick={onCopy} style={{marginRight: "0.25rem"}}>
-                    <GoLink size={props.size}/>
-                </button>
+            <button onClick={onCopy} style={{marginRight: "0.25rem"}}>
+                <GoLink size={props.size}/>
+            </button>
         </>
     )
 };
@@ -91,7 +92,7 @@ const Header1Element = ({attributes, children, element}) => {
     return (
         <Heading mt={5} id={anchorId}{...attributes}>
             <HashLink to={`#${anchorId}`}>{children}</HashLink>
-            <CopyLinkButton link={`${window.location.href.replace(window.location.hash,"")}#${anchorId}`} size={"25"}/>
+            <CopyLinkButton link={`${window.location.href.replace(window.location.hash, "")}#${anchorId}`} size={"25"}/>
             <hr/>
         </Heading>
     )
@@ -100,14 +101,104 @@ const Header1Element = ({attributes, children, element}) => {
 const Header2Element = ({attributes, children, element}) => {
     const anchorId = Node.string(element).toLowerCase().replaceAll(/\s+/g, '-')
     return (
-        <Heading size={"md"} id={anchorId}{...attributes}>
-            <HashLink
-                to={`#${anchorId}`}>{children}
-            </HashLink> <CopyLinkButton link={`${window.location.href.replace(window.location.hash,"")}#${anchorId}`} size={"15"}/>
+        <Heading mt={5} size={"md"} id={anchorId}{...attributes}>
+            <HashLink to={`#${anchorId}`}>
+                {children}
+            </HashLink>
             <hr/>
         </Heading>
     )
 }
+const isFormatActive = (editor, format) => {
+    const [match] = Editor.nodes(editor, {
+        match: n => n[format] === true,
+        mode: 'all',
+    })
+    return !!match
+}
+const toggleFormat = (editor, format) => {
+    const isActive = isFormatActive(editor, format)
+    Transforms.setNodes(
+        editor,
+        {[format]: isActive ? null : true},
+        {match: Text.isText, split: true}
+    )
+}
+const FormatButton = ({format, icon}) => {
+    const editor = useSlate()
+    return (
+        <Button
+            size={"small"}
+            reversed
+            active={isFormatActive(editor, format)}
+            onMouseDown={event => {
+                event.preventDefault()
+                toggleFormat(editor, format)
+            }}
+        >
+            <Icon>{icon}</Icon>
+        </Button>
+    )
+}
+export const HoveringToolbar = () => {
+    const ref = useRef<HTMLDivElement | null>()
+    const editor = useSlate()
+
+    useEffect(() => {
+        const el = ref.current
+        const {selection} = editor
+
+        if (!el) {
+            return
+        }
+
+        if (
+            !selection ||
+            !ReactEditor.isFocused(editor) ||
+            Range.isCollapsed(selection) ||
+            Editor.string(editor, selection) === ''
+        ) {
+            el.removeAttribute('style')
+            return
+        }
+
+        const domSelection = window.getSelection()
+        const domRange = domSelection.getRangeAt(0)
+        const rect = domRange.getBoundingClientRect()
+        el.style.opacity = '1'
+        el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`
+        el.style.left = `${rect.left +
+        window.pageXOffset -
+        el.offsetWidth / 2 +
+        rect.width / 2}px`
+    })
+
+    return (
+        <Portal>
+            <Menu
+                ref={ref}
+                className={css`
+                  padding: 8px 7px 6px;
+                  position: absolute;
+                  z-index: 1;
+                  top: -10000px;
+                  left: -10000px;
+                  margin-top: -6px;
+                  opacity: 0;
+                  background-color: #222;
+                  border-radius: 4px;
+                  transition: opacity 0.75s;
+                `}
+            >
+                <FormatButton format="bold" icon="format_bold"/>
+                <FormatButton format="italic" icon="format_italic"/>
+                <FormatButton format="underline" icon="format_underlined"/>
+                <FormatButton format="code" icon="code"/>
+            </Menu>
+        </Portal>
+    )
+}
+
 export const ImageElement = ({attributes, children, element}) => {
     const selected = useSelected()
     const focused = useFocused()
@@ -135,19 +226,19 @@ export const ImageElement = ({attributes, children, element}) => {
 
 
 export const withShortcuts = editor => {
-    const { deleteBackward, insertText } = editor
+    const {deleteBackward, insertText} = editor
 
     editor.insertText = text => {
-        const { selection } = editor
+        const {selection} = editor
 
         if (text === ' ' && selection && Range.isCollapsed(selection)) {
-            const { anchor } = selection
+            const {anchor} = selection
             const block = Editor.above(editor, {
                 match: n => Editor.isBlock(editor, n),
             })
             const path = block ? block[1] : []
             const start = Editor.start(editor, path)
-            const range = { anchor, focus: start }
+            const range = {anchor, focus: start}
             const beforeText = Editor.string(editor, range)
             const type = SHORTCUTS[beforeText]
 
@@ -162,7 +253,7 @@ export const withShortcuts = editor => {
                 })
 
                 if (type === 'list-item') {
-                    const list = { type: 'bulleted-list', children: [] }
+                    const list = {type: 'bulleted-list', children: []}
                     Transforms.wrapNodes(editor, list, {
                         match: n =>
                             !Editor.isEditor(n) &&
@@ -179,7 +270,7 @@ export const withShortcuts = editor => {
     }
 
     editor.deleteBackward = (...args) => {
-        const { selection } = editor
+        const {selection} = editor
 
         if (selection && Range.isCollapsed(selection)) {
             const match = Editor.above(editor, {

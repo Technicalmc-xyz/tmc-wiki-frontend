@@ -1,20 +1,23 @@
 //TODO add pagnation
 import React, {memo, useCallback, useEffect, useMemo, useState} from "react"
 import {Link} from "react-router-dom"
-import {Box, Heading, Button, Select, Flex, Spinner, Text, AlertIcon, Alert} from "@chakra-ui/react"
+import {Box, Heading, Button, Select, Flex, Spinner, Text, AlertIcon, Alert, Badge} from "@chakra-ui/react"
 import {motion} from "framer-motion"
 
 const Articles = () => {
     const MotionBox = motion.custom(Box);
     type Status = "PRIVATE" | "PUBLIC"
+
     interface Article {
         title: string;
         id: number;
-        tags: string;
+        tag: string;
         last_edited: string;
         description: string;
         status: Status;
+        featured: boolean;
     }
+
     const [metadata, setMetadata] = useState([])
     //default state of the fetch getPost is loading
     const [fetchState, setFetchState] = useState("loading")
@@ -49,42 +52,48 @@ const Articles = () => {
         } else if (sortType === 'alphabetic-reverse') {
             return b.title.localeCompare(a.title)
         }
-    },[sortType]);
+    }, [sortType]);
 
     const articleCard = useMemo(() => {
             return metadata
                 .sort((a, b) => sort(a, b))
-                .filter(filter => filter.tags === tagFilter || tagFilter === 'all')
-                .map(({title, id, tags, last_edited, description}: Article) => (
+                .filter(filter => filter.tag === tagFilter || tagFilter === 'all')
+                .map(({title, id, tag, last_edited, description, featured}: Article) => (
                         <MotionBox key={id}>
                             {compact
                                 ?
-                                    <MotionBox
-                                        borderRadius="md"
-                                        shadow={"md"}
-                                        p={"5"}
-                                        mb={"3"}
-                                    >
-                                        <Heading size={"md"}><Link className={"link"} to={`/render-article/${id}`}>{title}</Link>
-                                        </Heading>
-                                        <Text>{description}</Text>
-
-                                    </MotionBox>
-                                : <MotionBox
+                                <MotionBox
+                                    borderWidth="1px"
+                                    flex="1"
+                                    top={"0"}
                                     borderRadius="md"
                                     shadow={"md"}
                                     p={"5"}
                                     mb={"3"}
                                 >
-                                    <div className="card-body">
-                                        <Heading><Link className={"link"}
-                                                       to={`/render-article/${id}`}>{title}</Link>
-                                        </Heading>
-                                        <Text>{description}</Text>
-                                        <Text>{tags}</Text>
-                                        <Text>{new Date(last_edited).toLocaleString()}</Text>
-                                        <Link to={"/edit-article/" + id}><Button mt={2} variant={"outline"}>Edit</Button></Link>
-                                    </div>
+                                    <Heading size={"md"}><Link className={"link"} to={`/render-article/${id}`}>{title}</Link>
+                                    </Heading>
+                                    <Text>{description}</Text>
+
+                                </MotionBox>
+                                : <MotionBox
+                                    borderWidth="1px"
+                                    flex="1"
+                                    top={"0"}
+                                    borderRadius="md"
+                                    shadow={"md"}
+                                    p={"5"}
+                                    mb={"3"}
+                                >
+                                    {featured ? <Badge colorScheme="purple" fontSize={"1rem"} mb={2}>Featured</Badge> : null}
+                                    <Heading>
+                                        <Link className={"link"} to={`/render-article/${id}`}>{title}</Link>
+                                    </Heading>
+                                    <Badge>{tag}</Badge>
+                                    <Text>{description}</Text>
+                                    <Text>{new Date(last_edited).toLocaleString()}</Text>
+                                    <Link to={"/edit-article/" + id}>Edit</Link>
+
                                 </MotionBox>
                             }
                         </MotionBox>

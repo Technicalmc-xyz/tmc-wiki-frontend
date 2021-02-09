@@ -79,7 +79,6 @@ const UserButton = (props: UserProps) => {
     if (props.authenticated) {
         return (
             <React.Fragment>
-
                 <Link to={"/profile"}>
                     <Image
                         mr={2}
@@ -100,6 +99,13 @@ const UserButton = (props: UserProps) => {
         );
     }
 };
+const Admin = (props) => {
+    if (props.rank === "mod")
+        return (
+            <MenuItems to={"/admin"}>Admin</MenuItems>
+        )
+    else return null;
+}
 const Nav = props => {
     const {colorMode, toggleColorMode} = useColorMode()
     const [show, setShow] = React.useState(false);
@@ -114,6 +120,7 @@ const Nav = props => {
     const [authenticated, setAuthenticated] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState('');
     const [discordID, setDiscordID] = useState('');
+    const [rank, setRank] = useState('');
     const getUser = async () => {
         const response = await fetch('/api/__userinfo__');
         const data = await response.json();
@@ -122,6 +129,7 @@ const Nav = props => {
         if (auth) {
             setAvatarUrl(data.avatar);
             setDiscordID(data.id);
+            setRank(data.rank)
         }
     }
     return (
@@ -161,6 +169,7 @@ const Nav = props => {
                 <MenuItems to={"/new-article"}>New Article</MenuItems>
                 <MenuItems to={"/archive"}>Archive</MenuItems>
                 <MenuItems to={"about"}>About</MenuItems>
+                <Admin rank={rank}/>
             </Box>
 
             <Box
