@@ -10,10 +10,22 @@ import {
     AlertTitle,
     AlertDescription,
     Alert,
-    Button
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalCloseButton,
+    ModalHeader,
+    ModalBody,
+    Stack,
+    Box,
+    Kbd,
+    ModalFooter,
+    useDisclosure
 } from '@chakra-ui/react'
 import ArticleEditor from "../ArticleEditor";
 import {Link} from "react-router-dom";
+import {FaRegKeyboard} from "react-icons/fa";
 
 
 const EditArticle = () => {
@@ -72,7 +84,7 @@ const EditArticle = () => {
     const [success, setSuccess] = useState(false);
     //Slate.js editor states
     const [value, setValue] = useState<Node[]>(initialValue)
-
+    const {isOpen, onOpen, onClose} = useDisclosure()
 
     if (checkedAuth && !authed) {
         return <Alert status="error">
@@ -234,13 +246,46 @@ const EditArticle = () => {
                         <option value="World Manipulation">World Manipulation</option>
                         <option value="World Transportation">World Transportation</option>
                         <option value="Traffic">Traffic</option>
-                        <option value="Resource Management and Processing">Resource Management and Processing
-                        </option>
+                        <option value="Resource Management and Processing">Resource Management and Processing</option>
                         <option value="Duplicate">Duplicate</option>
+                        <option value="Game Mechanic">Game Mechanic</option>
                         <option value="Community">Community</option>
-
                     </Select>
                 </FormControl>
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay/>
+                    <ModalContent>
+                        <ModalCloseButton/>
+                        <ModalHeader>Keyboard Shortcuts</ModalHeader>
+                        <ModalBody>
+
+                            <Stack>
+                                <Box>Bold <Kbd>ctrl</Kbd> + <Kbd>b</Kbd></Box>
+                                <Box>Italic <Kbd>ctrl</Kbd> + <Kbd>i</Kbd></Box>
+                                <Box>Underline <Kbd>ctrl</Kbd> + <Kbd>u</Kbd></Box>
+                                <Box>Code <Kbd>ctrl</Kbd> + <Kbd>`</Kbd></Box>
+                            </Stack>
+                        </ModalBody>
+                        <ModalHeader>Markdown  Shortcuts</ModalHeader>
+                        <ModalBody>
+                            <Stack>
+                                <Box>Heading 1 <Kbd>#</Kbd></Box>
+                                <Box>Heading 2 <Kbd>##</Kbd></Box>
+                                <Box>Code Block <Kbd>```</Kbd></Box>
+                                <Box>Block Quote <Kbd>&gt;</Kbd></Box>
+                                <Box>List Item <Kbd>*</Kbd></Box>
+                                <Box>List Item <Kbd>-</Kbd></Box>
+                                <Box>List Item <Kbd>+</Kbd></Box>
+                            </Stack>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+                <FaRegKeyboard onClick={onOpen} size={'2em'}/>
                 <ArticleEditor initValue={value} readonly={false} placeholder={"Start writing ..."}/>
                 <Input
                     mb={2}

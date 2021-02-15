@@ -5,7 +5,7 @@ import Posts from './components/Articles/Articles';
 import RenderedArticle from "./components/RenderedArticle/RenderedArticle";
 import EditArticle from "./components/EditArticle/EditArticle";
 import NewArticle from "./components/NewArticle/NewArticle";
-import Archive from "./components/Archive/Archive";
+// import Archive from "./components/Archive/Archive";
 import About from "./components/About/About";
 import License from './components/License/License';
 import NotFound from "./components/NotFound";
@@ -43,7 +43,7 @@ const App = (): JSX.Element => {
                     <Route path='/render-article/:id' component={RenderedArticle}/>
                     <Route path='/new-article' component={NewArticle}/>
                     <Route path='/edit-article/:id' component={EditArticle}/>
-                    <Route path='/archive' component={Archive}/>
+                    {/*<Route path='/archive' component={Archive}/>*/}
                     <Route path='category/:tag'/>
                     <Route path='/admin' component={Admin}/>
 

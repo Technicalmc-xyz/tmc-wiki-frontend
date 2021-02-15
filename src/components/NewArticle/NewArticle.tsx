@@ -1,7 +1,28 @@
 import React, {useState, useEffect} from 'react'
 import ArticleEditor from "../ArticleEditor";
-import {FormControl, Input, Select, Box, Button, AlertIcon, AlertTitle, AlertDescription, Alert} from '@chakra-ui/react'
+import {
+    FormControl,
+    Input,
+    Select,
+    Box,
+    Button,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    Alert,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalFooter,
+    ModalBody,
+    Kbd,
+    Stack,
+} from '@chakra-ui/react'
 import {Link} from 'react-router-dom'
+import { FaRegKeyboard } from 'react-icons/fa';
 
 const NewArticle = () => {
     useEffect(() => {
@@ -19,7 +40,7 @@ const NewArticle = () => {
     const [success, setSuccess] = useState(false)
     const [authed, setAuthed] = useState(false);
     const [checkedAuth, setCheckedAuth] = useState(false);
-
+    const {isOpen, onOpen, onClose} = useDisclosure()
     const checkAuth = async () => {
         const response = await fetch('/api/__userinfo__');
         const data = await response.json();
@@ -86,11 +107,10 @@ const NewArticle = () => {
             return null;
         }
     }
-
     const SubmitButton = () => {
         if (madeChanges) {
             return (
-                <Button mt={10} onClick={submitPost}>Create Post</Button>
+                <Box><Button mt={10} onClick={submitPost}>Create Post</Button></Box>
             );
         } else
             return null;
@@ -118,6 +138,7 @@ const NewArticle = () => {
         return (
             <div>
                 <FailedPost/>
+
                 <FormControl>
                     <Input
                         id={"title"}
@@ -165,13 +186,46 @@ const NewArticle = () => {
                         <option value="World Manipulation">World Manipulation</option>
                         <option value="World Transportation">World Transportation</option>
                         <option value="Traffic">Traffic</option>
-                        <option value="Resource Management and Processing">Resource Management and Processing
-                        </option>
+                        <option value="Resource Management and Processing">Resource Management and Processing</option>
                         <option value="Duplicate">Duplicate</option>
+                        <option value="Game Mechanic">Game Mechanic</option>
                         <option value="Community">Community</option>
-
                     </Select>
                 </FormControl>
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay/>
+                    <ModalContent>
+                        <ModalCloseButton/>
+                        <ModalHeader>Keyboard Shortcuts</ModalHeader>
+                        <ModalBody>
+
+                            <Stack>
+                                <Box>Bold <Kbd>ctrl</Kbd> + <Kbd>b</Kbd></Box>
+                                <Box>Italic <Kbd>ctrl</Kbd> + <Kbd>i</Kbd></Box>
+                                <Box>Underline <Kbd>ctrl</Kbd> + <Kbd>u</Kbd></Box>
+                                <Box>Code <Kbd>ctrl</Kbd> + <Kbd>`</Kbd></Box>
+                            </Stack>
+                        </ModalBody>
+                        <ModalHeader>Markdown  Shortcuts</ModalHeader>
+                        <ModalBody>
+                            <Stack>
+                                <Box>Heading 1 <Kbd>#</Kbd></Box>
+                                <Box>Heading 2 <Kbd>##</Kbd></Box>
+                                <Box>Code Block <Kbd>```</Kbd></Box>
+                                <Box>Block Quote <Kbd>&gt;</Kbd></Box>
+                                <Box>List Item <Kbd>*</Kbd></Box>
+                                <Box>List Item <Kbd>-</Kbd></Box>
+                                <Box>List Item <Kbd>+</Kbd></Box>
+                            </Stack>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+                <FaRegKeyboard onClick={onOpen} size={'2em'}/>
                 <ArticleEditor initValue={initialValue} readonly={false} placeholder={"Start writing ..."}/>
                 <SubmitButton/>
             </div>

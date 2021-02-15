@@ -3,6 +3,7 @@ import React, {memo, useCallback, useEffect, useMemo, useState} from "react"
 import {Link} from "react-router-dom"
 import {Box, Heading, Button, Select, Flex, Spinner, Text, AlertIcon, Alert, Badge} from "@chakra-ui/react"
 import {motion} from "framer-motion"
+import { BiPencil } from "react-icons/bi"
 
 const Articles = () => {
     const MotionBox = motion.custom(Box);
@@ -92,8 +93,7 @@ const Articles = () => {
                                     <Badge>{tag}</Badge>
                                     <Text>{description}</Text>
                                     <Text>{new Date(last_edited).toLocaleString()}</Text>
-                                    <Link to={"/edit-article/" + id}>Edit</Link>
-
+                                    <Link to={"/edit-article/" + id}><BiPencil/></Link>
                                 </MotionBox>
                             }
                         </MotionBox>

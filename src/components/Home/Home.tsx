@@ -31,7 +31,10 @@ const Home = () => {
 
             </Flex>
             <HStack
-                spacing={4} direction="row" align="top"
+                spacing={4}
+                direction="row"
+                align="top"
+                mb={16}
             >
                 <MotionBox
                     p={5}
@@ -81,7 +84,7 @@ const Home = () => {
                         issue and feature requests here</Text>
 
                 </MotionBox>
-            </HStack>
+            </HStack >
             <LatestArticles/>
         </>
     )

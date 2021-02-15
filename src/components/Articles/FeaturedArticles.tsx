@@ -36,6 +36,7 @@ const FeaturedArticles = () => {
                 flex="1"
                 borderRadius="md"
                 height="50"
+                mb={3}
 
             >
                 <Link to={"/render-article/" + id}>
@@ -65,7 +66,7 @@ const FeaturedArticles = () => {
                 Check with Jakku on the Discord.</div>
         )
     } else return (
-        <Stack mt={10}>
+        <Stack>
             {postLink}
         </Stack>
     );

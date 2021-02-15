@@ -78,7 +78,9 @@ const RenderedArticle = () => {
         return (
             <div>
                 <Heading>{title}</Heading>
-                <Text fontSize={"sm"}>Last Edited: {new Date(lastEdited).toLocaleString()}</Text>
+
+                <Text fontSize={"sm"} mb={10}>Last Edited: {new Date(lastEdited).toLocaleString()}</Text>
+
                 <ArticleEditor initValue={value} readonly={true}/>
                 <EditButton/>
             </div>

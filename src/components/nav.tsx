@@ -167,7 +167,7 @@ const Nav = props => {
             >
                 <MenuItems to={"/articles"}>Articles</MenuItems>
                 <MenuItems to={"/new-article"}>New Article</MenuItems>
-                <MenuItems to={"/archive"}>Archive</MenuItems>
+                {/*<MenuItems to={"/archive"}>Archive</MenuItems>*/}
                 <MenuItems to={"about"}>About</MenuItems>
                 <Admin rank={rank}/>
             </Box>

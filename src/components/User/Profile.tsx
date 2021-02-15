@@ -11,7 +11,8 @@ import {
     Alert,
     AlertIcon,
     AlertTitle,
-    AlertDescription
+    AlertDescription,
+    Heading
 } from "@chakra-ui/react";
 import {useLocation} from "react-router-dom";
 
@@ -51,7 +52,7 @@ const Profile = () => {
     const AdminButton = (props: AdminButtonProps) => {
         if (props.rank === "mod") {
             return (
-                <Box>
+                <Box >
                     <HStack>
                         <a href={"/admin"}><RiAdminFill size={"40"}/></a>
                         <hr/>
@@ -69,18 +70,19 @@ const Profile = () => {
                     <Avatar borderRadius={"full"}
                                border={"1px"}
                                boxShadow={"xl"}
-                               width={"4vw"}
-                               height={"4vw"}
+                               width={"6vw"}
+                               height={"6vw"}
                                mb={2} src={`https://cdn.discordapp.com/avatars/${discordID}/${avatarUrl}`}
                                alt={"cannot find profile image"}/>
-                    <Box ml="3">
-                        <Text fontWeight="bold">
+                    <Box ml="3" mb={20}>
+                        <u><Heading fontWeight="bold">
                             {userName}#{discriminator}
-                            <Badge ml="1" colorScheme="green">
-                                {rank}
-                            </Badge>
-                        </Text>
+                        </Heading></u>
                         <Text fontSize={"sm"}>{discordID}</Text>
+                        <Badge mt={4} colorScheme="green" fontSize={"1em"}>
+                            {rank}
+                        </Badge>
+
 
                     </Box>
                 <AdminButton rank={rank}/>
